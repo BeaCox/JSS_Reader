@@ -24,6 +24,14 @@ type MailOptions struct {
 	Body     string // 邮件内容
 }
 
+var prefix map[string]string = map[string]string{
+	"register":       "您正在注册JSS_Reader，验证码为：",
+	"cancel":         "您正在注销JSS_Reader，验证码为：",
+	"forgetPassword": "您正在找回JSS_Reader密码，验证码为：",
+	"changePassword": "您正在修改JSS_Reader密码，验证码为：",
+	"changeEmail":    "您正在修改JSS_Reader邮箱，验证码为：",
+}
+
 // 返回随机的n位 code
 func genRandomCode(n int) string {
 	var code string
@@ -99,7 +107,7 @@ func SendCode(to string, from string) error {
 		MailPass: mailPass,
 		MailTo:   to,
 		Subject:  "来自JSS_Reader的验证码",
-		Body:     "您的验证码为：" + code + "，5分钟内有效。",
+		Body:     prefix[from] + code + "，5分钟内有效",
 	}
 
 	err = MailSend(options)

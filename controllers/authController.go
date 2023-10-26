@@ -190,9 +190,163 @@ func Cancel(c *fiber.Ctx) error {
 		})
 	}
 
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "bad request",
+		})
+	}
+
+	if data["code"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	if err := mailVerify.VerifyCode(user.Email, data["code"], "cancel"); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
 	database.DB.Delete(&user)
 
 	return c.JSON(fiber.Map{
 		"message": "success",
 	})
+}
+
+func ForgetPassword(c *fiber.Ctx) error {
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "bad request",
+		})
+	}
+
+	if data["email"] == "" || data["code"] == "" || data["newPassword"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	if err := mailVerify.VerifyCode(data["email"], data["code"], "forgetPassword"); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	var user models.User
+
+	database.DB.Where("email = ?", data["email"]).First(&user)
+
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["newPassword"]), 14)
+
+	database.DB.Model(&user).Update("password", password)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+func ChangePassword(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	user, err := middleware.IsAuthenticated(cookie)
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "bad request",
+		})
+	}
+
+	if data["code"] == "" || data["newPassword"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	if err := mailVerify.VerifyCode(user.Email, data["code"], "changePassword"); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["newPassword"]), 14)
+
+	database.DB.Model(&user).Update("password", password)
+
+	// auto logout
+	NULLcookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&NULLcookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+func ChangeEmail(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	user, err := middleware.IsAuthenticated(cookie)
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "bad request",
+		})
+	}
+
+	if data["code"] == "" || data["email"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	if err := mailVerify.VerifyCode(data["email"], data["code"], "changeEmail"); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	database.DB.Model(&user).Update("email", data["email"])
+
+	return c.JSON(user)
 }

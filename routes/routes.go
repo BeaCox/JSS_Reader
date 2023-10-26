@@ -11,7 +11,10 @@ func Setup(app *fiber.App) {
 	app.Post("/api/v1/register", controllers.Register)
 	app.Post("/api/v1/login", controllers.Login)
 	app.Post("/api/v1/logout", controllers.Logout)
-	app.Get("/api/v1/cancel", controllers.Cancel)
+	app.Post("/api/v1/cancel", controllers.Cancel)
+	app.Post("/api/v1/forgetPassword", controllers.ForgetPassword)
+	app.Post("/api/v1/changePassword", controllers.ChangePassword)
+	app.Post("/api/v1/changeEmail", controllers.ChangeEmail)
 
 	// mail verify
 	app.Post("/api/v1/sendMailCode", controllers.SendMailCode)
