@@ -9,6 +9,7 @@ import (
 
 func main() {
 	database.Connect()
+	database.RedisInit()
 
 	app := fiber.New()
 
@@ -18,7 +19,7 @@ func main() {
 
 	routes.Setup(app)
 
-	if err := app.Listen(":3000"); err != nil {
+	if err := app.Listen(":8000"); err != nil {
 		panic(err)
 	}
 }

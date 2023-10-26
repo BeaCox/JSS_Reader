@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"JSS_Reader/database"
+	"JSS_Reader/helpers/mailVerify"
+	"JSS_Reader/middleware"
 	"JSS_Reader/models"
 	"crypto/rand"
 	"encoding/base64"
@@ -55,7 +57,22 @@ func Register(c *fiber.Ctx) error {
 	var data map[string]string
 
 	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
 		return err
+	}
+
+	if data["username"] == "" || data["email"] == "" || data["password"] == "" || data["code"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	if err := mailVerify.VerifyCode(data["email"], data["code"], "register"); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
@@ -76,6 +93,13 @@ func Login(c *fiber.Ctx) error {
 
 	if err := c.BodyParser(&data); err != nil {
 		return err
+	}
+
+	if data["email"] == "" || data["password"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
 	}
 
 	var user models.User
@@ -127,9 +151,7 @@ func Login(c *fiber.Ctx) error {
 func User(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
 
-	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secretKey), nil
-	})
+	user, err := middleware.IsAuthenticated(cookie)
 
 	if err != nil {
 		c.Status(fiber.StatusUnauthorized)
@@ -137,12 +159,6 @@ func User(c *fiber.Ctx) error {
 			"message": "unauthenticated",
 		})
 	}
-
-	claims := token.Claims.(*jwt.StandardClaims)
-
-	var user models.User
-
-	database.DB.Where("id = ?", claims.Issuer).First(&user)
 
 	return c.JSON(user)
 }
@@ -156,6 +172,25 @@ func Logout(c *fiber.Ctx) error {
 	}
 
 	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+func Cancel(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	user, err := middleware.IsAuthenticated(cookie)
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	database.DB.Delete(&user)
 
 	return c.JSON(fiber.Map{
 		"message": "success",
