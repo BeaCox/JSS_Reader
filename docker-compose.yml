@@ -27,5 +27,5 @@ services:
       - "6379:6379"
     command: "redis-server /etc/redis/redis.conf --appendonly yes --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
     volumes:
-      - redis-data:/data
+      - ./redis-data:/data
       - ./redis.conf:/etc/redis/redis.conf
