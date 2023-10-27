@@ -1,0 +1,50 @@
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 1rem;
+  cursor: pointer; 
+}
+
+.collapsebutton {
+  position: absolute;
+  bottom: 1rem; 
+  cursor: pointer; 
+  margin: auto 0;
+}
+
+.menustyle {
+  padding: 0 24px !important; 
+}
+
+/* 定义滚动条的宽度和背景颜色 */
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;  /* 滚动条的背景颜色 */
+}
+
+/* 定义滚动条滑块的样式 */
+::-webkit-scrollbar-thumb {
+  background-color: transparent;  /* 滚动条滑块的颜色 */
+  border-radius: 5px;  /* 滚动条滑块的圆角大小 */
+}
+
+/* 定义当鼠标悬停在滚动条滑块上时的样式 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;  /* 滚动条滑块在鼠标悬停时的颜色 */
+}
+
+/* 定义当鼠标悬停在订阅列表上时滚动条滑块的样式 */
+.feed:hover::-webkit-scrollbar-thumb {
+  background-color: #888;  /* 滚动条滑块的颜色 */
+}
+
+
+/* 定义当鼠标悬停在订阅列表上时滚动条滑块的样式 */
+.feed:hover::-webkit-scrollbar-thumb {
+  background-color: #888;  /* 滚动条滑块的颜色 */
+}

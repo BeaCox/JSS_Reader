@@ -1,0 +1,21 @@
+.article-content {
+    font-family: 'Arial', sans-serif; /* 选择你喜欢的字体 */
+    line-height: 1.5; /* 调整行高 */
+    font-size: 16px; /* 调整字体大小 */
+  }
+  
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+
+  .modal-content-container {
+    max-height: 807px;  
+    overflow-y: auto;
+    padding-right: 95px; /* 为滚动条预留空间 */
+    margin-right: -105px; /* 抵消额外的padding，使滚动条移至右边缘 */
+}
