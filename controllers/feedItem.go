@@ -49,19 +49,22 @@ func GetFeedItemsofFeed(c *fiber.Ctx) error {
 		})
 	}
 
-	// get items from database
+	tag := c.Query("tag")
 	var items []models.FeedItem
-	database.DB.Where("fid = ?", fid).Find(&items)
+	switch tag {
+	case "starred":
+		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("updated desc").Find(&items)
+	case "unread":
+		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("updated desc").Find(&items)
+	default:
+		database.DB.Where("fid = ?", fid).Order("updated desc").Find(&items)
+	}
 
 	updatedDuring := c.Query("updatedDuring")
-
 	// updatedDuring items by date
 	if updatedDuring != "" {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
-
-	// sort items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
 
 	return c.JSON(items)
 }
@@ -110,9 +113,9 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 	// get items by parsing feed url
 	items, err := rssParser.ParseFeed(feed.Url)
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
+		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
-			"message": "could not parse feed",
+			"message": "cannot update feed",
 		})
 	}
 	// for each item, check if it is already in database
@@ -124,30 +127,42 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 			item.Fid = feed.Fid
 			database.DB.Create(&item)
 		}
-		// if found, update the item
-		if temp.Iid != 0 {
-			item.Iid = temp.Iid
-			database.DB.Model(&item).Updates(models.FeedItem{
-				Unread:      temp.Unread,
-				Starred:     temp.Starred,
-				Url:         temp.Url,
-				Title:       temp.Title,
-				Description: temp.Description,
-				Content:     temp.Content,
-				Updated:     temp.Updated,
-				Published:   temp.Published,
+		// if found, and updated time is different, update the item
+		if temp.Iid != 0 && temp.Updated != item.Updated {
+			database.DB.Model(&temp).Updates(models.FeedItem{
+				Title:       item.Title,
+				Author:      item.Author,
+				Description: item.Description,
+				Content:     item.Content,
+				Updated:     item.Updated,
+				Published:   item.Published,
 			})
 		}
+		// if found, and updated time is the same, do nothing
 	}
 
 	// get items from database
-	var newItems []models.FeedItem
-	database.DB.Where("fid = ?", fid).Find(&newItems)
+	tag := c.Query("tag")
+	var itemsFromDatabase []models.FeedItem
+	switch tag {
+	case "starred":
+		database.DB.Where("fid = ? AND starred = ?", fid, 1).Find(&itemsFromDatabase)
+	case "unread":
+		database.DB.Where("fid = ? AND unread = ?", fid, 1).Find(&itemsFromDatabase)
+	default:
+		database.DB.Where("fid = ?", fid).Find(&itemsFromDatabase)
+	}
 
-	// sort items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
+	updatedDuring := c.Query("updatedDuring")
+	// updatedDuring items by date
+	if updatedDuring != "" {
+		itemsFromDatabase = rssParser.FilterFeedItemsByDate(itemsFromDatabase, updatedDuring)
+	}
 
-	return c.JSON(newItems)
+	// sort the feed items by updated time
+	itemsFromDatabase = rssParser.SortFeedItemsByUpdated(itemsFromDatabase)
+
+	return c.JSON(itemsFromDatabase)
 }
 
 func GetFeedItemsofCategory(c *fiber.Ctx) error {
@@ -187,11 +202,27 @@ func GetFeedItemsofCategory(c *fiber.Ctx) error {
 	database.DB.Where("cid = ?", cid).Find(&feeds)
 
 	// get items of all returned feeds
+	tag := c.Query("tag")
 	var items []models.FeedItem
-	for _, feed := range feeds {
-		var temp []models.FeedItem
-		database.DB.Where("fid = ?", feed.Fid).Find(&temp)
-		items = append(items, temp...)
+	switch tag {
+	case "starred":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND starred = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	case "unread":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND unread = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	default:
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ?", feed.Fid).Find(&temp)
+			items = append(items, temp...)
+		}
 	}
 
 	updatedDuring := c.Query("updatedDuring")
@@ -200,7 +231,7 @@ func GetFeedItemsofCategory(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
-	// sort items by updated time
+	// sort the feed items by updated time
 	items = rssParser.SortFeedItemsByUpdated(items)
 
 	return c.JSON(items)
@@ -247,10 +278,8 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 		// get items by parsing feed url
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
-			c.Status(fiber.StatusInternalServerError)
-			return c.JSON(fiber.Map{
-				"message": "could not parse feed",
-			})
+			// just skip this feed
+			continue
 		}
 		// for each item, check if it is already in database
 		for _, item := range items {
@@ -261,32 +290,51 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 				item.Fid = feed.Fid
 				database.DB.Create(&item)
 			}
-			// if found, update the item
-			if temp.Iid != 0 {
-				item.Iid = temp.Iid
-				database.DB.Model(&item).Updates(models.FeedItem{
-					Unread:      temp.Unread,
-					Starred:     temp.Starred,
-					Url:         temp.Url,
-					Title:       temp.Title,
-					Description: temp.Description,
-					Content:     temp.Content,
-					Updated:     temp.Updated,
-					Published:   temp.Published,
+			// if found and updated time is different, update the item
+			if temp.Iid != 0 && temp.Updated != item.Updated {
+				database.DB.Model(&temp).Updates(models.FeedItem{
+					Title:       item.Title,
+					Author:      item.Author,
+					Description: item.Description,
+					Content:     item.Content,
+					Updated:     item.Updated,
+					Published:   item.Published,
 				})
 			}
 		}
 	}
 
 	// get items of all returned feeds
+	tag := c.Query("tag")
 	var items []models.FeedItem
-	for _, feed := range feeds {
-		var temp []models.FeedItem
-		database.DB.Where("fid = ?", feed.Fid).Find(&temp)
-		items = append(items, temp...)
+	switch tag {
+	case "starred":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND starred = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	case "unread":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND unread = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	default:
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ?", feed.Fid).Find(&temp)
+			items = append(items, temp...)
+		}
 	}
 
-	// sort items by updated time
+	updatedDuring := c.Query("updatedDuring")
+	// updatedDuring items by date
+	if updatedDuring != "" {
+		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
+	}
+
+	// sort the feed items by updated time
 	items = rssParser.SortFeedItemsByUpdated(items)
 
 	return c.JSON(items)
@@ -308,6 +356,10 @@ func GetAllFeedItems(c *fiber.Ctx) error {
 	var categories []models.Category
 	database.DB.Where("uid = ?", user.Id).Find(&categories)
 
+	if len(categories) == 0 {
+		return c.JSON(nil)
+	}
+
 	// get all fid of all returned categories
 	var feeds []models.Feed
 	for _, category := range categories {
@@ -316,12 +368,32 @@ func GetAllFeedItems(c *fiber.Ctx) error {
 		feeds = append(feeds, temp...)
 	}
 
+	if len(feeds) == 0 {
+		return c.JSON(nil)
+	}
+
 	// get items of all returned feeds
+	tag := c.Query("tag")
 	var items []models.FeedItem
-	for _, feed := range feeds {
-		var temp []models.FeedItem
-		database.DB.Where("fid = ?", feed.Fid).Find(&temp)
-		items = append(items, temp...)
+	switch tag {
+	case "starred":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND starred = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	case "unread":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND unread = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	default:
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ?", feed.Fid).Find(&temp)
+			items = append(items, temp...)
+		}
 	}
 
 	updatedDuring := c.Query("updatedDuring")
@@ -330,7 +402,7 @@ func GetAllFeedItems(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
-	// sort items by updated time
+	// sort the feed items by updated time
 	items = rssParser.SortFeedItemsByUpdated(items)
 
 	return c.JSON(items)
@@ -352,6 +424,10 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 	var categories []models.Category
 	database.DB.Where("uid = ?", user.Id).Find(&categories)
 
+	if len(categories) == 0 {
+		return c.JSON(nil)
+	}
+
 	// get all fid of all returned categories
 	var feeds []models.Feed
 	for _, category := range categories {
@@ -360,15 +436,16 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 		feeds = append(feeds, temp...)
 	}
 
-	// get items of all returned feeds
+	if len(feeds) == 0 {
+		return c.JSON(nil)
+	}
+
 	for _, feed := range feeds {
 		// get items by parsing feed url
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
-			c.Status(fiber.StatusInternalServerError)
-			return c.JSON(fiber.Map{
-				"message": "could not parse feed",
-			})
+			// just skip this feed
+			continue
 		}
 		// for each item, check if it is already in database
 		for _, item := range items {
@@ -379,32 +456,51 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 				item.Fid = feed.Fid
 				database.DB.Create(&item)
 			}
-			// if found, update the item
-			if temp.Iid != 0 {
-				item.Iid = temp.Iid
-				database.DB.Model(&item).Updates(models.FeedItem{
-					Unread:      temp.Unread,
-					Starred:     temp.Starred,
-					Url:         temp.Url,
-					Title:       temp.Title,
-					Description: temp.Description,
-					Content:     temp.Content,
-					Updated:     temp.Updated,
-					Published:   temp.Published,
+			// if found and updated time is different, update the item
+			if temp.Iid != 0 && temp.Updated != item.Updated {
+				database.DB.Model(&temp).Updates(models.FeedItem{
+					Title:       item.Title,
+					Author:      item.Author,
+					Description: item.Description,
+					Content:     item.Content,
+					Updated:     item.Updated,
+					Published:   item.Published,
 				})
 			}
 		}
 	}
 
 	// get items of all returned feeds
+	tag := c.Query("tag")
 	var items []models.FeedItem
-	for _, feed := range feeds {
-		var temp []models.FeedItem
-		database.DB.Where("fid = ?", feed.Fid).Find(&temp)
-		items = append(items, temp...)
+	switch tag {
+	case "starred":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND starred = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	case "unread":
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ? AND unread = ?", feed.Fid, 1).Find(&temp)
+			items = append(items, temp...)
+		}
+	default:
+		for _, feed := range feeds {
+			var temp []models.FeedItem
+			database.DB.Where("fid = ?", feed.Fid).Find(&temp)
+			items = append(items, temp...)
+		}
 	}
 
-	// sort items by updated time
+	updatedDuring := c.Query("updatedDuring")
+	// updatedDuring items by date
+	if updatedDuring != "" {
+		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
+	}
+
+	// sort the feed items by updated time
 	items = rssParser.SortFeedItemsByUpdated(items)
 
 	return c.JSON(items)

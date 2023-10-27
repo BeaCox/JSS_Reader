@@ -15,6 +15,7 @@ func Setup(app *fiber.App) {
 	app.Post("/api/v1/forgetPassword", controllers.ForgetPassword)
 	app.Post("/api/v1/changePassword", controllers.ChangePassword)
 	app.Post("/api/v1/changeEmail", controllers.ChangeEmail)
+	app.Post("/api/v1/changeUsername", controllers.ChangeUsername)
 
 	// mail verify
 	app.Post("/api/v1/sendMailCode", controllers.SendMailCode)
@@ -45,9 +46,18 @@ func Setup(app *fiber.App) {
 	app.Get("/api/v1/item/all/get", controllers.GetAllFeedItems)
 	app.Get("/api/v1/item/all/update", controllers.UpdateAllFeedItems)
 
-	// starred feed items route
-	app.Get("/api/v1/starred", controllers.GetStarredFeedItems)
-	app.Post("/api/v1/star", controllers.StarFeedItems)
-	app.Post("/api/v1/unstar", controllers.UnstarFeedItems)
+	// star feed items route
+	app.Get("/api/v1/star/:iid", controllers.StarFeedItem)
+	app.Get("/api/v1/unstar/:iid", controllers.UnstarFeedItem)
 
+	// read feed items route
+	app.Get("/api/v1/read/one/:iid", controllers.ReadFeedItem)
+	app.Get("/api/v1/unread/one/:iid", controllers.UnreadFeedItem)
+	app.Get("/api/v1/read/feed/:fid", controllers.ReadFeedItemsOfFeed)
+	app.Get("/api/v1/unread/feed/:fid", controllers.UnreadFeedItemsOfFeed)
+	app.Get("/api/v1/read/all", controllers.ReadAllFeedItems)
+	app.Get("/api/v1/unread/all", controllers.UnreadAllFeedItems)
+
+	// explore
+	app.Get("/api/v1/explore/:category", controllers.GetExplore)
 }

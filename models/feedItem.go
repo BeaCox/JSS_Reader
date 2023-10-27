@@ -11,6 +11,7 @@ type FeedItem struct {
 	// rss properties
 	Url         string    `json:"url" gorm:"uniqueIndex:unique_group;type:varchar(255);not null"`
 	Title       string    `json:"title" gorm:"type:text;not null"`
+	Author      string    `json:"author" gorm:"type:varchar(255);not null"`
 	Description string    `json:"description" gorm:"type:text;not null"`
 	Content     string    `json:"content" gorm:"type:text;not null"`
 	Updated     time.Time `json:"updated" gorm:"type:datetime;not null"`

@@ -60,6 +60,20 @@ func SendMailCode(c *fiber.Ctx) error {
 		}
 	}
 
+	if data["service"] == "forgetPassword" {
+		// should check whether email exists in database
+		var user models.User
+
+		database.DB.Where("email = ?", data["email"]).First(&user)
+
+		if user.Id == 0 {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "email not found",
+			})
+		}
+	}
+
 	if err := mailVerify.SendCode(data["email"], data["service"]); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{

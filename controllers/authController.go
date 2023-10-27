@@ -350,3 +350,36 @@ func ChangeEmail(c *fiber.Ctx) error {
 
 	return c.JSON(user)
 }
+
+func ChangeUsername(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	user, err := middleware.IsAuthenticated(cookie)
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "bad request",
+		})
+	}
+
+	if data["newUsername"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "please fill in all fields",
+		})
+	}
+
+	database.DB.Model(&user).Update("username", data["username"])
+
+	return c.JSON(user)
+}

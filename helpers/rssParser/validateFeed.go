@@ -1,8 +1,10 @@
 package rssParser
 
 import (
+	"context"
 	"github.com/mmcdole/gofeed"
 	"net/url"
+	"time"
 )
 
 func IsValidFeed(feed string) bool {
@@ -12,10 +14,13 @@ func IsValidFeed(feed string) bool {
 		return false
 	}
 
+	// check if feed is valid rss feed, timeout after 20 seconds
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
 	// check if feed is valid rss feed
 	parser := gofeed.NewParser()
 
-	_, err = parser.ParseURL(feed)
+	_, err = parser.ParseURLWithContext(feed, ctx)
 
 	if err != nil {
 		return false

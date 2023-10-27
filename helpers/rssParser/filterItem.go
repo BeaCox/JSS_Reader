@@ -29,8 +29,29 @@ func FilterFeedItemsByDate(feedItems []models.FeedItem, updatedDuring string) []
 			}
 		}
 	default:
-		filteredItems = feedItems
+		return feedItems
 	}
 
+	return filteredItems
+}
+
+func FilterFeedItemsByTag(feedItems []models.FeedItem, tag string) []models.FeedItem {
+	var filteredItems []models.FeedItem
+	switch {
+	case tag == "starred":
+		for _, item := range feedItems {
+			if item.Starred {
+				filteredItems = append(filteredItems, item)
+			}
+		}
+	case tag == "unread":
+		for _, item := range feedItems {
+			if item.Unread {
+				filteredItems = append(filteredItems, item)
+			}
+		}
+	default:
+		return feedItems
+	}
 	return filteredItems
 }

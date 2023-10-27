@@ -2,6 +2,7 @@ package database
 
 import (
 	"JSS_Reader/models"
+	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,8 +16,14 @@ func Connect() {
 		panic("could not load env variables")
 	}
 
-	mysqlDNS := os.Getenv("MYSQL_DNS")
-	connection, err := gorm.Open(mysql.Open(mysqlDNS), &gorm.Config{})
+	USER := os.Getenv("DB_USER")
+	PASS := os.Getenv("DB_PASSWORD")
+	HOST := os.Getenv("DB_HOST")
+	DBNAME := os.Getenv("DB_NAME")
+
+	mysqlDSN := USER + ":" + PASS + "@tcp(" + HOST + ")/" + DBNAME + "?charset=utf8mb4&parseTime=True&loc=Local"
+	fmt.Println(mysqlDSN)
+	connection, err := gorm.Open(mysql.Open(mysqlDSN), &gorm.Config{})
 
 	if err != nil {
 		panic("could not connect to the database")
@@ -37,5 +44,7 @@ func Connect() {
 	if err := connection.AutoMigrate(&models.FeedItem{}); err != nil {
 		panic("could not migrate the database")
 	}
-
+	if err := connection.AutoMigrate(&models.Explore{}); err != nil {
+		panic("could not migrate the database")
+	}
 }

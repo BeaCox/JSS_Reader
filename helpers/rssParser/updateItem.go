@@ -2,15 +2,22 @@ package rssParser
 
 import (
 	"JSS_Reader/models"
+	"context"
+	"fmt"
 	"github.com/mmcdole/gofeed"
+	"time"
 )
 
 // just parse the feed(s) and return FeedItem structs
 func ParseFeed(feedURL string) ([]models.FeedItem, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
 	// parse the feed
 	fp := gofeed.NewParser()
-
-	feed, err := fp.ParseURL(feedURL)
+	fmt.Println("start parsing: ", feedURL)
+	feed, err := fp.ParseURLWithContext(feedURL, ctx)
+	fmt.Println("end parsing: ", feedURL)
 
 	if err != nil {
 		return nil, err
@@ -20,9 +27,17 @@ func ParseFeed(feedURL string) ([]models.FeedItem, error) {
 	var feedItems []models.FeedItem
 
 	for _, item := range feed.Items {
+		author := ""
+		if item.Authors != nil {
+			author = item.Authors[0].Name
+		}
+		if author == "" && feed.Authors != nil {
+			author = feed.Authors[0].Name
+		}
 		feedItem := models.FeedItem{
 			Title:       item.Title,
 			Url:         item.Link,
+			Author:      author,
 			Description: item.Description,
 			Content:     item.Content,
 			Updated:     *item.UpdatedParsed,
@@ -50,9 +65,17 @@ func ParseFeeds(feedURLs []string) ([]models.FeedItem, error) {
 
 		// convert the feed items to FeedItem structs
 		for _, item := range feed.Items {
+			author := ""
+			if item.Authors != nil {
+				author = item.Authors[0].Name
+			}
+			if author == "" && feed.Authors != nil {
+				author = feed.Authors[0].Name
+			}
 			feedItem := models.FeedItem{
 				Title:       item.Title,
 				Url:         item.Link,
+				Author:      author,
 				Description: item.Description,
 				Content:     item.Content,
 				Updated:     *item.UpdatedParsed,
