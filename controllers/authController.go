@@ -379,7 +379,7 @@ func ChangeUsername(c *fiber.Ctx) error {
 		})
 	}
 
-	database.DB.Model(&user).Update("username", data["username"])
+	database.DB.Model(&user).Update("username", data["newUsername"])
 
 	return c.JSON(user)
 }

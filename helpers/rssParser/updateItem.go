@@ -34,14 +34,28 @@ func ParseFeed(feedURL string) ([]models.FeedItem, error) {
 		if author == "" && feed.Authors != nil {
 			author = feed.Authors[0].Name
 		}
+		updated := time.Now()
+		if feed.UpdatedParsed != nil {
+			updated = *feed.UpdatedParsed
+		}
+		if item.UpdatedParsed != nil {
+			updated = *item.UpdatedParsed
+		}
+		published := updated
+		if feed.PublishedParsed != nil {
+			published = *feed.PublishedParsed
+		}
+		if item.PublishedParsed != nil {
+			published = *item.PublishedParsed
+		}
 		feedItem := models.FeedItem{
 			Title:       item.Title,
 			Url:         item.Link,
 			Author:      author,
 			Description: item.Description,
 			Content:     item.Content,
-			Updated:     *item.UpdatedParsed,
-			Published:   *item.PublishedParsed,
+			Updated:     updated,
+			Published:   published,
 		}
 
 		feedItems = append(feedItems, feedItem)
@@ -72,14 +86,28 @@ func ParseFeeds(feedURLs []string) ([]models.FeedItem, error) {
 			if author == "" && feed.Authors != nil {
 				author = feed.Authors[0].Name
 			}
+			updated := time.Now()
+			if feed.UpdatedParsed != nil {
+				updated = *feed.UpdatedParsed
+			}
+			if item.UpdatedParsed != nil {
+				updated = *item.UpdatedParsed
+			}
+			published := updated
+			if feed.PublishedParsed != nil {
+				published = *feed.PublishedParsed
+			}
+			if item.PublishedParsed != nil {
+				published = *item.PublishedParsed
+			}
 			feedItem := models.FeedItem{
 				Title:       item.Title,
 				Url:         item.Link,
 				Author:      author,
 				Description: item.Description,
 				Content:     item.Content,
-				Updated:     *item.UpdatedParsed,
-				Published:   *item.PublishedParsed,
+				Updated:     updated,
+				Published:   published,
 			}
 
 			feedItems = append(feedItems, feedItem)

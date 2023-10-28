@@ -15,7 +15,7 @@ func IsValidFeed(feed string) bool {
 	}
 
 	// check if feed is valid rss feed, timeout after 20 seconds
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// check if feed is valid rss feed
 	parser := gofeed.NewParser()

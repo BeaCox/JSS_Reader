@@ -18,6 +18,16 @@ func Init() error {
 		if err != nil {
 			return err
 		}
+	} else {
+		// if there is something in explore table, drop it and init it
+		database.DB.Exec("DROP TABLE explores;")
+		if err := database.DB.AutoMigrate(&models.Explore{}); err != nil {
+			return err
+		}
+		err := importSql()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

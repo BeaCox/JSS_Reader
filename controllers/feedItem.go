@@ -5,6 +5,7 @@ import (
 	"JSS_Reader/helpers/rssParser"
 	"JSS_Reader/middleware"
 	"JSS_Reader/models"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -53,11 +54,11 @@ func GetFeedItemsofFeed(c *fiber.Ctx) error {
 	var items []models.FeedItem
 	switch tag {
 	case "starred":
-		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("updated desc").Find(&items)
+		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("published desc").Find(&items)
 	case "unread":
-		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("updated desc").Find(&items)
+		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("published desc").Find(&items)
 	default:
-		database.DB.Where("fid = ?", fid).Order("updated desc").Find(&items)
+		database.DB.Where("fid = ?", fid).Order("published desc").Find(&items)
 	}
 
 	updatedDuring := c.Query("updatedDuring")
@@ -160,7 +161,7 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 	}
 
 	// sort the feed items by updated time
-	itemsFromDatabase = rssParser.SortFeedItemsByUpdated(itemsFromDatabase)
+	itemsFromDatabase = rssParser.SortFeedItemsByPublished(itemsFromDatabase)
 
 	return c.JSON(itemsFromDatabase)
 }
@@ -232,7 +233,7 @@ func GetFeedItemsofCategory(c *fiber.Ctx) error {
 	}
 
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
+	items = rssParser.SortFeedItemsByPublished(items)
 
 	return c.JSON(items)
 }
@@ -278,6 +279,7 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 		// get items by parsing feed url
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
+			fmt.Println(err)
 			// just skip this feed
 			continue
 		}
@@ -335,7 +337,7 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 	}
 
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
+	items = rssParser.SortFeedItemsByPublished(items)
 
 	return c.JSON(items)
 }
@@ -403,7 +405,7 @@ func GetAllFeedItems(c *fiber.Ctx) error {
 	}
 
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
+	items = rssParser.SortFeedItemsByPublished(items)
 
 	return c.JSON(items)
 }
@@ -445,6 +447,7 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
 			// just skip this feed
+			fmt.Println(err)
 			continue
 		}
 		// for each item, check if it is already in database
@@ -501,7 +504,7 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 	}
 
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByUpdated(items)
+	items = rssParser.SortFeedItemsByPublished(items)
 
 	return c.JSON(items)
 }
