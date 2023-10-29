@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# JSS_Reader
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Front-end 
 
-## Available Scripts
+### Environment
 
-In the project directory, you can run:
+This project is built using React and relies on the following main dependencies:
 
-### `npm start`
+- Node.js:`18.18.0`
+- React: `18.2.0` 
+- Create-react-app:`5.0.1`
+- Antd: `5.9.4`
+- Axios: `1.5.1`
 
-Runs the app in the development mode.\
+### usage
+
+You can install project dependencies using the following command:
+
+```
+npm install
+```
+
+You can run the project locally using the following command:
+
+```
+npm start
+```
+
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Todo
 
-### `npm test`
+####  **Landing Page**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [x] Feature blocks animation appearing one by one 10.2x
+- [x] Display details on mouse hover over feature blocks 10.2x
+- [x] Button in bottom right to quickly return to the top 10.2x
+- [x] Beautify the registration and login pages 10.28
+- [ ] Replacing text and images in the property display section
 
-### `npm run build`
+#### Content
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [x] **Categories and subscriptions lists** 10.2x
+- [x] Rss detail Modal 10.2x
+- [x] Newfeed 10.28
+- [x] **Three views for RSS articles** 10.28
+- [x] **Fetching articles** 10.28
+- [x] Display content following HTML syntax 10.28
+- [x] **Explore page** 10.29
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [x] **Updates when a new subscription is added** 10.30
+- [x] Solve the tag confusion problem 10.30
+- [x] **Solve the bug of not rendering 'unread' icon in time after one-click reading** 10.30
+- [ ] Render 'star' and 'unread' icons anytime property changed
+- [ ] Change the Logo ?
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Account
 
-### `npm run eject`
+- [x] Delete account 10.28
+- [x] Test and modify reset password and email10.29
+- [x] Modify username 10.29
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### **Settings**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [x] General
+  - [x] Start page - all/star/unread 10.30
+  - [x] Default sort - latest/oldest 10.30
+  - [x] Default presentation - cards/magazine/titles view 10.30
+  - [x] Mark as read on scroll - yes/no 10.30
+- [x] Appearance
+  - [x] Fontsize 10.30
+  - [x] Fontfamily 10.30
+  - [x] Theme (add system preference) 10.30
+  - [x] Display density 10.30
+- [ ] **Settings test**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
