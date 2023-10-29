@@ -2,10 +2,10 @@ package database
 
 import (
 	"JSS_Reader/models"
-	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
 	"os"
 )
 
@@ -22,12 +22,12 @@ func Connect() {
 	DBNAME := os.Getenv("DB_NAME")
 
 	mysqlDSN := USER + ":" + PASS + "@tcp(" + HOST + ")/" + DBNAME + "?charset=utf8mb4&parseTime=True&loc=Local"
-	fmt.Println(mysqlDSN)
 	connection, err := gorm.Open(mysql.Open(mysqlDSN), &gorm.Config{})
 
 	if err != nil {
 		panic("could not connect to the database")
 	}
+	log.Print("connected to mysql")
 
 	DB = connection
 

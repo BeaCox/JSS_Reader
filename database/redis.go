@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/joho/godotenv"
+	"log"
 	"os"
 	"strconv"
 )
@@ -33,7 +34,7 @@ func RedisInit() {
 	if err != nil {
 		panic(fmt.Sprintf("connect redis fail: %v", err))
 	} else {
-		fmt.Printf("connect redis succ %v\n", pong)
+		log.Println("redis connect success: ", pong)
 	}
 
 }

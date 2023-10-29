@@ -10,14 +10,14 @@ import (
 
 func TimelyUpdate() {
 	for {
-		Update()
+		update()
 		time.Sleep(12 * time.Hour)
 	}
 }
 
 // parse the feeds in explore table
 // and update subtitle and image
-func Update() {
+func update() {
 	// get all feeds in explore table
 	var exploreFeeds []models.Explore
 	database.DB.Find(&exploreFeeds)
@@ -32,10 +32,13 @@ func Update() {
 			continue
 		}
 		// update subtitle and image
-		feed.Description = feedParsed.Description
+		if feedParsed.Description != "" {
+			feed.Description = feedParsed.Description
+		}
 		if feedParsed.Image != nil {
 			feed.Image = feedParsed.Image.URL
 		}
-		database.DB.Save(&feed)
+		// just change the subtitle and image
+		database.DB.Model(&feed).Updates(models.Explore{Description: feed.Description, Image: feed.Image})
 	}
 }

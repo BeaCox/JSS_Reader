@@ -1,7 +1,7 @@
 version: '1.0.0'
 services:
   jss_reader:
-    image: jss_reader:1.0.13
+    image: jss_reader:1.0.14
     restart: always
     depends_on:
       - mysql

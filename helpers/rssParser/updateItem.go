@@ -3,8 +3,8 @@ package rssParser
 import (
 	"JSS_Reader/models"
 	"context"
-	"fmt"
 	"github.com/mmcdole/gofeed"
+	"log"
 	"time"
 )
 
@@ -15,9 +15,9 @@ func ParseFeed(feedURL string) ([]models.FeedItem, error) {
 	defer cancel()
 	// parse the feed
 	fp := gofeed.NewParser()
-	fmt.Println("start parsing: ", feedURL)
+	log.Println("start parsing: ", feedURL)
 	feed, err := fp.ParseURLWithContext(feedURL, ctx)
-	fmt.Println("end parsing: ", feedURL)
+	log.Println("end parsing: ", feedURL)
 
 	if err != nil {
 		return nil, err
