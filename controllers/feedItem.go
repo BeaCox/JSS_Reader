@@ -50,15 +50,21 @@ func GetFeedItemsofFeed(c *fiber.Ctx) error {
 		})
 	}
 
+	order := c.Query("order")
+	if order == "oldest" {
+		order = "desc"
+	} else {
+		order = "asc"
+	}
 	tag := c.Query("tag")
 	var items []models.FeedItem
 	switch tag {
 	case "starred":
-		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("published desc").Find(&items)
+		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("published " + order).Find(&items)
 	case "unread":
-		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("published desc").Find(&items)
+		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("published " + order).Find(&items)
 	default:
-		database.DB.Where("fid = ?", fid).Order("published desc").Find(&items)
+		database.DB.Where("fid = ?", fid).Order("published " + order).Find(&items)
 	}
 
 	updatedDuring := c.Query("updatedDuring")
@@ -160,8 +166,9 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 		itemsFromDatabase = rssParser.FilterFeedItemsByDate(itemsFromDatabase, updatedDuring)
 	}
 
+	order := c.Query("order")
 	// sort the feed items by updated time
-	itemsFromDatabase = rssParser.SortFeedItemsByPublished(itemsFromDatabase)
+	itemsFromDatabase = rssParser.SortFeedItemsByPublished(itemsFromDatabase, order)
 
 	return c.JSON(itemsFromDatabase)
 }
@@ -232,8 +239,9 @@ func GetFeedItemsofCategory(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
+	order := c.Query("order")
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByPublished(items)
+	items = rssParser.SortFeedItemsByPublished(items, order)
 
 	return c.JSON(items)
 }
@@ -336,8 +344,9 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
+	order := c.Query("order")
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByPublished(items)
+	items = rssParser.SortFeedItemsByPublished(items, order)
 
 	return c.JSON(items)
 }
@@ -404,8 +413,9 @@ func GetAllFeedItems(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
+	order := c.Query("order")
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByPublished(items)
+	items = rssParser.SortFeedItemsByPublished(items, order)
 
 	return c.JSON(items)
 }
@@ -503,8 +513,9 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 		items = rssParser.FilterFeedItemsByDate(items, updatedDuring)
 	}
 
+	order := c.Query("order")
 	// sort the feed items by updated time
-	items = rssParser.SortFeedItemsByPublished(items)
+	items = rssParser.SortFeedItemsByPublished(items, order)
 
 	return c.JSON(items)
 }

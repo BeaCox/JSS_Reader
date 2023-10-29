@@ -60,4 +60,8 @@ func Setup(app *fiber.App) {
 
 	// explore
 	app.Get("/api/v1/explore/:category", controllers.GetExplore)
+
+	// setting
+	app.Get("/api/v1/setting", controllers.GetSetting)
+	app.Put("/api/v1/setting", controllers.UpdateSetting)
 }

@@ -85,6 +85,11 @@ func Register(c *fiber.Ctx) error {
 
 	database.DB.Create(&user)
 
+	var setting models.Setting
+	setting.Uid = user.Id
+
+	database.DB.Create(&setting)
+
 	return c.JSON(user)
 }
 
