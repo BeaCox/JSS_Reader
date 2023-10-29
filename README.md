@@ -1,66 +1,70 @@
-# JSS_Reader
+# Getting Started with Create React App
 
-## Front-end 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### Environment
+## Available Scripts
 
-This project is built using React and relies on the following main dependencies:
+In the project directory, you can run:
 
-- Node.js:`18.18.0`
-- React: `18.2.0` 
-- Create-react-app:`5.0.1`
-- Antd: `5.9.4`
-- Axios: `1.5.1`
+### `npm start`
 
-### usage
-
-You can install project dependencies using the following command:
-
-```
-npm install
-```
-
-You can run the project locally using the following command:
-
-```
-npm start
-```
-
+Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### TODO
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-####  **Landing Page**
+### `npm test`
 
-- [x] Feature blocks animation appearing one by one
-- [x] Display details on mouse hover over feature blocks
-- [x] Button in bottom right to quickly return to the top
-- [x] Beautify the registration and login pages
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-#### **Home**
+### `npm run build`
 
-- [x] Categories and subscriptions lists
-- [x] Newfeed
-- [x] Three views for RSS articles
-- [x] Delete account
-- [ ] **Fetching articles**
-- [ ] Modify username (returns an empty username)
-- [ ] Display and modify 'star' and 'unread' icons based on attribute values
-- [x] Display content following HTML syntax
-- [ ] Beautify  article content
-- [ ] Explore
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-#### **Settings**
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-- [ ] General
-  - [ ] Start page - all/star/unread
-  - [ ] Default sort - latest/oldest
-  - [ ] Default presentation - cards/magazine/titles view
-  - [ ] Mark as read on scroll - yes/no
-  - [ ] Auto refresh frequency - 10min/30min/1h/3h
-- [ ] Appearance
-  - [ ] Fontsize
-  - [ ] Fontfamily
-  - [ ] Theme (add system preference)
-  - [ ] Display density
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -31,7 +31,7 @@ const ForgetPwd = ({ isOpen, onClose, onVerificationSubmit }) => {
         axios
           .post('/api/v1/sendMailCode', { email: email, service: 'forgetPassword' })
           .then((res) => {
-            message.success(res.data.message);
+            message.success("Verification Code Sent Successfully");
             setCountdown(59); // 只有在成功发送验证码后才开始倒计时
           })
           .catch((error) => {
@@ -47,7 +47,7 @@ const ForgetPwd = ({ isOpen, onClose, onVerificationSubmit }) => {
             newPassword: newpassword,
           })
           .then((res) => {
-            message.success('Registration successful!');
+            message.success('Successful password change');
             onClose();
             navigate('/login');
           })

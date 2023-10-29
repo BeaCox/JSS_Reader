@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 import { Menu, Dropdown} from 'antd';
-import { PlusOutlined, SyncOutlined} from '@ant-design/icons';
+import { PlusOutlined} from '@ant-design/icons';
 import { ReactComponent as MoreIcon } from '../../assets/icons/More.svg';
 import NewFeed from './NewFeed';
 import Subscription from './Subscriptions'
@@ -10,10 +10,6 @@ export default function FeedMenu({folders, setFolders, onSubscriptionSelected}) 
   
   const handleNewFeedClick = () => {
     setModalVisible(true);
-  };
-
-  const refreshFeeds = () => {
-    // 添加刷新订阅列表的逻辑
   };
 
   const handleSubscriptionClick = (fid, name) => {
@@ -26,10 +22,6 @@ export default function FeedMenu({folders, setFolders, onSubscriptionSelected}) 
     <Menu>
       <Menu.Item key="1" icon={<PlusOutlined />} onClick={handleNewFeedClick}>
         New Feed
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="2" icon={<SyncOutlined />} onClick={refreshFeeds}>
-        Refresh Feeds
       </Menu.Item>
     </Menu>
   );

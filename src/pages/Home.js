@@ -3,19 +3,16 @@ import { Layout , ConfigProvider, theme} from 'antd';
 import Header from '../layout/Header';
 import Sidebar from '../layout/Sidebar';
 import Content from '../layout/Content';
-import { ContentProvider } from '../services/Context';
-
+import { ActionProvider } from '../context/actionContext';
+import { FolderProvider } from '../context/folderContext';
+import { useSettings } from '../context/settingContext';
 
 
 const Home = () => {
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode} = useSettings();
   const [folders, setFolders] = useState([]);
-  const toggleTheme = () => {
-    setIsDarkMode((previousValue) => !previousValue);
-  };
-
-  // 在useState中添加selectedSubscription状态
+  
 const [selectedSubscription, setSelectedSubscription] = useState(null);
 const selectedSubscriptionName = selectedSubscription ? selectedSubscription.name : '';
 const selectedSubscriptionFid = selectedSubscription ? selectedSubscription.fid : '';
@@ -25,24 +22,26 @@ const handleSubscriptionSelected = (fid, name) => {
 };
 
   return (
-    <ContentProvider>
+      <ActionProvider>
       <ConfigProvider theme={{algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,}}>
         <Layout style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           {/* header on the top */}
-          <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+          <Header isDarkMode={isDarkMode} />
     
           {/* layout on the bottom */}
           <Layout style={{ display: 'flex', flexDirection: 'row'}}>
             {/* feed list */}
-            <Sidebar folders={folders} setFolders={setFolders}  onSelectedSubscription={handleSubscriptionSelected}/>
-
+            <FolderProvider>
+              <Sidebar folders={folders} setFolders={setFolders}  onSelectedSubscription={handleSubscriptionSelected}/>
+           
             {/* feed content */}
             <Content author={selectedSubscriptionName} fid={selectedSubscriptionFid} isDarkMode={isDarkMode} />
+             </FolderProvider>
           </Layout>
     
         </Layout>
       </ConfigProvider>
-    </ContentProvider>
+      </ActionProvider>
   );
   
 };

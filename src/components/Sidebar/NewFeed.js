@@ -1,18 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { Modal, Input, Select, Divider, Button, Space, message, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import * as FeedAPI from '../../services/FeedAPI'; 
-import * as CategoryAPI from '../../services/CategoryAPI'; 
-import { useContent } from '../../services/Context';  // 替换为你的context文件路径
+import * as FeedAPI from '../../api/FeedAPI'; 
+import * as CategoryAPI from '../../api/CategoryAPI'; 
+import { useFolder } from '../../context/folderContext';  
+import { useAction } from '../../context/actionContext';
 
-export default function NewFeed({ modalVisible, setModalVisible }) {
-  const {folders, updateFolders } = useContent();
-
-  const [feedName, setFeedName] = useState('');
-  const [rssUrl, setRssUrl] = useState('');
+export default function NewFeed({ modalVisible, setModalVisible, initialFeed }) {
+  const {folders, updateFolders } = useFolder();
+  const { updateAction, updateHeaderAction } = useAction();
+  const [feedName, setFeedName] = useState(initialFeed?.name || '');
+  const [rssUrl, setRssUrl] = useState(initialFeed?.url || '');
   const [folderName, setFolderName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
+  
+  useEffect(() => {
+    setFeedName(initialFeed?.name || '');
+    setRssUrl(initialFeed?.url || '');
+}, [initialFeed]);
+
 
   //订阅是否有效
   const isValidURL = (str) => {
@@ -57,6 +64,9 @@ export default function NewFeed({ modalVisible, setModalVisible }) {
             return;
         }
 
+        updateAction('subscription');
+        updateHeaderAction('update');
+     
         updateFolders(prevFolders => {
             const newFolders = [...prevFolders];
             const folderIndex = newFolders.findIndex(folder => folder.name === folderName);

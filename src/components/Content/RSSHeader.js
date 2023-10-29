@@ -1,8 +1,13 @@
 import React from 'react';
 import {Button, Menu, Dropdown} from 'antd';
-import { EyeOutlined, StarOutlined, CheckOutlined, SyncOutlined} from '@ant-design/icons';
+import { EyeOutlined, CheckOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { useAction } from '../../context/actionContext';
+import { useSettings } from '../../context/settingContext';
 
-export default function RSSHeader({ isDarkMode, onShowTitlesOnly, onShowMagazine, onShowCards, author, action}) {
+export default function RSSHeader({
+          isDarkMode, action, author, onShowTitlesOnly, onShowMagazine, 
+          onShowCards, onMenuItemClick, isSpinning, setIsSpinning }) {
+
     const headerStyle = {
         display: 'flex',
         position: 'sticky',
@@ -37,6 +42,9 @@ export default function RSSHeader({ isDarkMode, onShowTitlesOnly, onShowMagazine
         case 'explore':
           headerTitle = "Explore";
           break;
+        case 'help':
+          headerTitle = "Help";
+          break;
         case 'subscriptions':
           headerTitle = author
           break;
@@ -46,6 +54,19 @@ export default function RSSHeader({ isDarkMode, onShowTitlesOnly, onShowMagazine
           
       }
 
+    const {updateHeaderAction } = useAction();
+    const { settings } = useSettings();
+
+
+      const handleReadClick = () => {
+        updateHeaderAction('read');
+      };
+
+      const handleUpdateClick = () => {
+        setIsSpinning(true);
+        updateHeaderAction('update');
+      };
+
       const renderIcons = () => {
         switch(action) {
             case 'all':
@@ -54,12 +75,15 @@ export default function RSSHeader({ isDarkMode, onShowTitlesOnly, onShowMagazine
             case 'subscriptions':
                 return (
                     <div>
-                        <Dropdown overlay={eyeMenu}>
-                            <Button icon={<EyeOutlined />} style={{ marginRight: 8 }} />
+                        <Dropdown overlay={filtermenu}>
+                            <Button icon={<EyeOutlined  />} style={{ marginRight: 8 }} />
                         </Dropdown>
-                        <Button icon={<CheckOutlined  />} style={{ marginRight: 8 }} />
-                        <Button icon={<StarOutlined />} style={{ marginRight: 8 }} />
-                        <Button icon={<SyncOutlined />} />
+                        <Dropdown overlay={eyeMenu}>
+                            <Button icon={<ClockCircleOutlined />} style={{ marginRight: 8 }} />
+                        </Dropdown>
+                        <Button icon={<CheckOutlined  />} style={{ marginRight: 8 }} onClick={handleReadClick}/>
+                        <Button icon={<SyncOutlined spin={isSpinning ? true : false} />} onClick={handleUpdateClick}/>
+
                     </div>
                 );
             case 'account':
@@ -84,19 +108,28 @@ export default function RSSHeader({ isDarkMode, onShowTitlesOnly, onShowMagazine
         onShowCards();
       };
 
+      const handleFilterClick = (e) => {
+        updateHeaderAction('date');
+        if (onMenuItemClick) {
+          onMenuItemClick(e.key);
+        }
+    };
+    
     const eyeMenu = (
-        <Menu>
-            <Menu.ItemGroup title="Show First">
-                <Menu.Item key="1" >Newest</Menu.Item>
-                <Menu.Item key="2" >Oldest</Menu.Item>
-            </Menu.ItemGroup>
-            <Menu.Divider />
-            <Menu.ItemGroup title="Layout">
-                <Menu.Item key="3" onClick={handleLayoutTitleOnly}>Titles-only View</Menu.Item>
-                <Menu.Item key="4" onClick={handleLayoutMagazine}>Magazine View</Menu.Item>
-                <Menu.Item key="5" onClick={handleLayoutCards}>Cards View</Menu.Item>
-            </Menu.ItemGroup>
+        <Menu selectable={true} defaultSelectedKeys={"1"}>
+            <Menu.Item key="1" onClick={handleFilterClick}>All time</Menu.Item>
+            <Menu.Item key="2" onClick={handleFilterClick}>Within a day</Menu.Item>
+            <Menu.Item key="3" onClick={handleFilterClick}>Within a week</Menu.Item>
+            <Menu.Item key="4" onClick={handleFilterClick}>Within a month</Menu.Item>
         </Menu>
+    );
+
+    const filtermenu =(
+      <Menu selectable={true} defaultSelectedKeys={[`${settings.default_presentation}`]}>
+        <Menu.Item key="1" onClick={handleLayoutCards}>Cards View</Menu.Item>
+        <Menu.Item key="2" onClick={handleLayoutMagazine}>Magazine View</Menu.Item>
+        <Menu.Item key="3" onClick={handleLayoutTitleOnly}>Titles-only View</Menu.Item>
+      </Menu>
     );
 
     return (

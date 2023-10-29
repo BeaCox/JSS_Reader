@@ -2,40 +2,87 @@ import React, { useState } from 'react';
 import { Card, Row, Col, Skeleton, Typography } from 'antd';
 import { LinkOutlined, StarOutlined, StarFilled, CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 import RSSDetail from './RSSDetail';
+import ArticleAPI from '../../api/ArticleAPI';
+import { useSettings } from '../../context/settingContext';
 
-// Extract 1st img as the cover
-function getFirstImage(content) {
-  const match = content.match(/<img[^>]+src=['"]([^'">]+)['"]/); 
+function getFirstImage(description, content) {
+  let match = description.match(/<img[\s\S]*?src=['"]?([^'">]+)['"]?/);
+
+  if (!match && content) {
+    match = content.match(/<img[\s\S]*?src=['"]?([^'">]+)['"]?/);
+  }
+
   return match ? match[1] : null;
 }
 
-export default function CardView({ articles }) {
-  const [starred, setStarred] = useState(Array(articles.length).fill(false));
-  const [read, setRead] = useState(Array(articles.length).fill(false));
+function extractTextFromHTML(html) {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+  return tempDiv.textContent || tempDiv.innerText || "";
+}
+
+export default function CardView({ articles: initialArticles }) {
   const [currentArticle, setCurrentArticle] = useState(null);
+  const [articles, setArticles] = useState(initialArticles); 
+  const {settings} = useSettings();
 
-  const handleStar = (index) => {
-    const newStarred = [...starred];
-    newStarred[index] = !newStarred[index];
-    setStarred(newStarred);
-  }
+const handleStar = async (index) => {
+  const article = articles[index];
+  try {
+    // 更新文章的 starred 状态
+    const updatedArticle = { ...article, starred: !article.starred };
+    // 根据文章的新状态调用API
+    if (updatedArticle.starred) {
+      await ArticleAPI.starItem(article.iid);
+    } else {
+      await ArticleAPI.unstarItem(article.iid);
+    }
 
-  const handleRead = (index) => {
-    const newRead = [...read];
-    newRead[index] = !newRead[index];
-    setRead(newRead);
+    // 更新本地状态
+    const updatedArticles = [...articles];
+    updatedArticles[index] = updatedArticle;
+    setArticles(updatedArticles);
+  } catch (error) {
+    console.error('Error toggling star:', error);
   }
+}
+
+const handleRead = async (index) => {
+  const article = articles[index];
+  try {
+    // 更新文章的 starred 状态
+    const updatedArticle = { ...article, unread: !article.unread };
+    // 根据文章的新状态调用API
+    if (updatedArticle.unread) {
+      await ArticleAPI.markItemAsUnread(article.iid);
+    } else {
+      await ArticleAPI.markItemAsRead(article.iid);
+    }
+
+    // 更新本地状态
+    const updatedArticles = [...articles];
+    updatedArticles[index] = updatedArticle;
+    setArticles(updatedArticles);
+  } catch (error) {
+    console.error('Error toggling read:', error);
+  }
+}
 
   return (
     <>
       <Row gutter={[16, 16]} style={{ padding: '2rem 3rem', margin: '0' }}>
         {articles.map((article, index) => {
-          const imageUrl = getFirstImage(article.content);
+          const imageUrl = getFirstImage(article.description, article.content);
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={article.fid}>
               <Card
                 hoverable
-                onClick={() => setCurrentArticle(article)}
+                onClick={() => { 
+                  setCurrentArticle(article);
+                  if (settings.mark_as_read_on_scroll === 1) {
+                    article.unread && handleRead(index); 
+                  }
+                }}
                 style={{ 
                   width: '325px',
                   height: '360px',
@@ -50,10 +97,10 @@ export default function CardView({ articles }) {
                 )}
                 actions={[
                   <div onClick={(e) => { e.stopPropagation(); handleStar(index); }}>
-                    {starred[index] ? <StarFilled style={{ fontSize: '24px' }} /> : <StarOutlined style={{ fontSize: '24px' }} />}
+                    {article.starred ? <StarFilled style={{ fontSize: '24px' }} /> : <StarOutlined style={{ fontSize: '24px' }} />}
                   </div>,
                   <div onClick={(e) => { e.stopPropagation(); handleRead(index); }}>
-                    {read[index] ? <CheckCircleFilled style={{ fontSize: '24px' }} /> : <CheckCircleOutlined style={{ fontSize: '24px' }} />}
+                    {!article.unread ? <CheckCircleFilled style={{ fontSize: '24px' }} /> : <CheckCircleOutlined style={{ fontSize: '24px' }} />}
                   </div>,
                   <a href={article.url} target="_blank" rel="noopener noreferrer" onClick={(e) => { e.stopPropagation() }}>
                     <LinkOutlined style={{ fontSize: '24px' }} />
@@ -71,10 +118,12 @@ export default function CardView({ articles }) {
                     description={
                       <div>
                         <Typography.Paragraph 
-                          ellipsis={{ rows: imageUrl ? 1 : 9, expandable: false }}>
-                            {article.description}
+                          ellipsis={{ rows: imageUrl ? 1 : 8, expandable: false }}>
+                            {extractTextFromHTML(article.description)}
                         </Typography.Paragraph>
+                        <Typography.Text ellipsis={{ rows: 1, expandable: false }}>
                         {article.author} | {new Date(article.published).toLocaleString()}
+                        </Typography.Text>
                       </div>
                     }
                   />

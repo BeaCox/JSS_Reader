@@ -29,7 +29,7 @@ const SignupVerify = ({ isOpen, onClose, username, email, password, service }) =
     axios
       .post('/api/v1/sendMailCode', { email: email, service:service })
       .then((res) => {
-        message.success(res.data.message);
+        message.success("Verification Code Sent Successfully");
         setCountdown(59); 
       })
       .catch((error) => {

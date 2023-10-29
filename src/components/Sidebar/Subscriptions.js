@@ -2,18 +2,19 @@ import React, { useState,useEffect } from 'react';
 import { Menu, message, Modal,Button, } from 'antd';
 import {DeleteOutlined} from '@ant-design/icons';
 import { ReactComponent as FolderIcon } from '../../assets/icons/Folder.svg';
-import * as CategoryAPI from '../../services/CategoryAPI'; 
-import * as FeedAPI from '../../services/FeedAPI';
-import { useContent } from '../../services/Context';  
+import * as CategoryAPI from '../../api/CategoryAPI'; 
+import * as FeedAPI from '../../api/FeedAPI';
+import { useAction } from '../../context/actionContext';  
+import { useFolder } from '../../context/folderContext';
 
 export default function Subscription({ onSubscriptionClick }) {
-    const { folders, updateFolders } = useContent();
+    const { folders, updateFolders } = useFolder();
     const [targetKey, setTargetKey] = useState(null);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
-    const { updateAction } = useContent();
+    const { updateAction } = useAction();
 
     const showDeleteConfirmModal = () => {
         setConfirmModalVisible(true);

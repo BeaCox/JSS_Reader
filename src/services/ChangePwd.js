@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Modal } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePwd = ({ isOpen, onClose, onChangePassword }) => {
     const [newPassword2, setNewPassword2] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [countdown, setCountdown] = useState(60);
+    const navigate = useNavigate();
 
     useEffect(() => {
         let interval;
@@ -30,9 +32,9 @@ const ChangePwd = ({ isOpen, onClose, onChangePassword }) => {
         else if (newPassword !== newPassword2) { message.error("Please check whether the two passwords are the same") }
         else {
             axios
-                .post('/api/v1/sendMailCode', { service: 'changePassword' })
+                .post('/api/v1/sendMailCode', { service: 'changePassword'})
                 .then((res) => {
-                    message.success(res.data.message);
+                    message.success("Verification Code Sent Successfully");
                     setCountdown(59); // 只有在成功发送验证码后才开始倒计时
                 })
                 .catch((error) => {
@@ -46,11 +48,12 @@ const ChangePwd = ({ isOpen, onClose, onChangePassword }) => {
         axios
             .post('/api/v1/changePassword', {
                 code: verificationCode,
-                password: newPassword,
+                newPassword: newPassword,
             })
             .then((res) => {
-                message.success('Registration successful!');
+                message.success('Successful password change');
                 onClose();
+                navigate('/login');
             })
             .catch((error) => {
                 message.error(error.response.data.message);

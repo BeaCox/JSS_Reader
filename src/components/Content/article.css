@@ -1,7 +1,7 @@
 .article-content {
-    font-family: 'Arial', sans-serif; /* 选择你喜欢的字体 */
-    line-height: 1.5; /* 调整行高 */
-    font-size: 16px; /* 调整字体大小 */
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    font-size: 16px; 
   }
   
 .article-content img {

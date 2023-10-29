@@ -1,6 +1,6 @@
 import React from 'react';
 import {Menu} from 'antd';
-import { useContent } from '../../services/Context'; 
+import { useAction } from '../../context/actionContext'; 
 import '../../layout/Sidebar.css'
 
 import { ReactComponent as AllIcon } from '../../assets/icons/All.svg';
@@ -25,7 +25,7 @@ export default function FeedFilter({collapsed}){
         console.log('click ', e);
       }; 
     
-    const { updateAction } = useContent();
+    const { updateAction } = useAction();
 
     const handleAllClick = () => {
       updateAction('all');

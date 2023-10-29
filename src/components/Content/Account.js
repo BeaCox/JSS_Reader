@@ -181,8 +181,9 @@ function Account() {
       />
 
       <ChangeEmail
-        isOpen={isEmailModalVisible}
-        onClose={handleEmailCancel}
+          isOpen={isEmailModalVisible}
+          onClose={handleEmailCancel}
+          onEmailChanged={(newEmail) => setEmail(newEmail)}
       />
 
       <CancelAccount
@@ -190,6 +191,7 @@ function Account() {
         onClose={handleAccountCancel}
       />
     </div>
+    
   );
 }
 

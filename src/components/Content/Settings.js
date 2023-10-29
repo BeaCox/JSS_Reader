@@ -1,23 +1,26 @@
-import React, { useState } from "react";
-import { Card, Radio} from "antd";
+import React, { useState , useEffect} from "react";
+import { Card, Radio } from "antd";
+import { useSettings } from "../../context/settingContext";
 
 function Settings() {
-  const [general, setGeneral] = useState({
-    startPage: "all",
-    defaultSort: "latest",
-    defaultPresentation: "cards",
-    autoRefreshFrequency: "10min",
-    markAsReadOnScroll: "yes",
-    presentArticlesOnNewTabPage: "yes",
-  });
+  const { settings, updateSettings } = useSettings({});
 
-  const [appearance, setAppearance] = useState({
-    fontSize: "medium",
-    fontFamily: "default",
-    theme: "light",
-    displayDensity: "default",
-  });
+  // 加载设置的状态
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+  if (Object.keys(settings).length > 0) {
+    setLoading(false);
+  }
+}, [settings]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const handleSettingChange = (key, value) => {
+    updateSettings(key, value);
+  };
 
   return (
     <div style={{ padding: "2rem 3rem" }}>
@@ -26,13 +29,13 @@ function Settings() {
           Start Page:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setGeneral({ ...general, startPage: e.target.value })}
-            value={general.startPage}
+            onChange={(e) => handleSettingChange('start_page', e.target.value)}
+            value={settings.start_page}
           >
-            <Radio.Button value="all">All</Radio.Button>
-            <Radio.Button value="star">Star</Radio.Button>
-            <Radio.Button value="unread">Unread</Radio.Button>
-            <Radio.Button value="explore">Explore</Radio.Button>
+            <Radio.Button value={1}>All</Radio.Button>
+            <Radio.Button value={2}>Star</Radio.Button>
+            <Radio.Button value={3}>Unread</Radio.Button>
+            <Radio.Button value={4}>Explore</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -40,11 +43,11 @@ function Settings() {
           Default Sort:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setGeneral({ ...general, defaultSort: e.target.value })}
-            value={general.defaultSort}
+            onChange={(e) => handleSettingChange('default_sort', e.target.value)}
+            value={settings.default_sort}
           >
-            <Radio.Button value="latest">Latest</Radio.Button>
-            <Radio.Button value="oldest">Oldest</Radio.Button>
+            <Radio.Button value={1}>Latest</Radio.Button>
+            <Radio.Button value={2}>Oldest</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -52,26 +55,12 @@ function Settings() {
           Default Presentation:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setGeneral({ ...general, defaultPresentation: e.target.value })}
-            value={general.defaultPresentation}
+            onChange={(e) => handleSettingChange('default_presentation', e.target.value)}
+            value={settings.default_presentation}
           >
-            <Radio.Button value="cards">Cards View</Radio.Button>
-            <Radio.Button value="magazine">Magazine View</Radio.Button>
-            <Radio.Button value="titles">Titles-Only View</Radio.Button>
-          </Radio.Group>
-        </div>
-
-        <div style={{ marginBottom: 20, fontSize:18 }}>
-          Auto Refresh Frequency:
-          <Radio.Group
-            style={{marginLeft:16}}
-            onChange={(e) => setGeneral({ ...general, autoRefreshFrequency: e.target.value })}
-            value={general.autoRefreshFrequency}
-          >
-            <Radio.Button value="10min">10 min</Radio.Button>
-            <Radio.Button value="30min">30 min</Radio.Button>
-            <Radio.Button value="1h">1 hour</Radio.Button>
-            <Radio.Button value="3h">3 hours</Radio.Button>
+            <Radio.Button value={1}>Cards View</Radio.Button>
+            <Radio.Button value={2}>Magazine View</Radio.Button>
+            <Radio.Button value={3}>Titles-Only View</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -79,11 +68,11 @@ function Settings() {
           Mark as Read on Scroll:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setGeneral({ ...general, markAsReadOnScroll: e.target.value })}
-            value={general.markAsReadOnScroll}
+            onChange={(e) => handleSettingChange('mark_as_read_on_scroll', e.target.value)}
+            value={settings.mark_as_read_on_scroll}
           >
-            <Radio value="yes">Yes</Radio>
-            <Radio value="no">No</Radio>
+            <Radio value={1}>Yes</Radio>
+            <Radio value={2}>No</Radio>
           </Radio.Group>
         </div>
 
@@ -94,12 +83,12 @@ function Settings() {
           Font Size:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setAppearance({ ...appearance, fontSize: e.target.value })}
-            value={appearance.fontSize}
+            onChange={(e) => handleSettingChange('font_size', e.target.value)}
+            value={settings.font_size}
           >
-            <Radio.Button value="small">Small</Radio.Button>
-            <Radio.Button value="medium">Medium</Radio.Button>
-            <Radio.Button value="large">Large</Radio.Button>
+            <Radio.Button value={1}>Small</Radio.Button>
+            <Radio.Button value={2}>Medium</Radio.Button>
+            <Radio.Button value={3}>Large</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -107,12 +96,12 @@ function Settings() {
           Font Family:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setAppearance({ ...appearance, fontFamily: e.target.value })}
-            value={appearance.fontFamily}
+            onChange={(e) => handleSettingChange('font_family', e.target.value)}
+            value={settings.font_family}
           >
-            <Radio.Button value="default">Default</Radio.Button>
-            <Radio.Button value="arial">Arial</Radio.Button>
-            <Radio.Button value="courier">Courier</Radio.Button>
+            <Radio.Button value={1}>Arial</Radio.Button>
+            <Radio.Button value={2}>Courier</Radio.Button>
+            <Radio.Button value={3}>Times New Roman</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -120,12 +109,12 @@ function Settings() {
           Theme:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setAppearance({ ...appearance, theme: e.target.value })}
-            value={appearance.theme}
+            onChange={(e) => handleSettingChange('theme', e.target.value)}
+            value={settings.theme}
           >
-            <Radio.Button value="light">Light</Radio.Button>
-            <Radio.Button value="dark">Dark</Radio.Button>
-            <Radio.Button value="system">System Preference</Radio.Button>
+            <Radio.Button value={1}>Light</Radio.Button>
+            <Radio.Button value={2}>Dark</Radio.Button>
+            <Radio.Button value={3}>System Preference</Radio.Button>
           </Radio.Group>
         </div>
 
@@ -133,12 +122,12 @@ function Settings() {
           Display Density:
           <Radio.Group
             style={{marginLeft:16}}
-            onChange={(e) => setAppearance({ ...appearance, displayDensity: e.target.value })}
-            value={appearance.displayDensity}
+            onChange={(e) => handleSettingChange('display_density', e.target.value)}
+            value={settings.display_density}
           >
-            <Radio.Button value="default">Default</Radio.Button>
-            <Radio.Button value="compact">Compact</Radio.Button>
-            <Radio.Button value="comfortable">Comfortable</Radio.Button>
+            <Radio.Button value={1}>Default</Radio.Button>
+            <Radio.Button value={2}>Compact</Radio.Button>
+            <Radio.Button value={3}>Comfortable</Radio.Button>
           </Radio.Group>
         </div>
       </Card>

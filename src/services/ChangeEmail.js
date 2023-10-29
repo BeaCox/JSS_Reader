@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Input, message, Modal } from "antd";
 import axios from 'axios';
 
-const ChangeEmail = ({ isOpen, onClose, onChangeEmail }) => {
+const ChangeEmail = ({ isOpen, onClose, onEmailChanged }) => {
   const [newEmail, setNewEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [countdown, setCountdown] = useState(60);
@@ -28,7 +28,8 @@ const ChangeEmail = ({ isOpen, onClose, onChangeEmail }) => {
     axios
       .post('/api/v1/sendMailCode', { service: 'changeEmail', email: newEmail })
       .then((res) => {
-        message.success(res.data.message);
+        message.success("Verification Code Sent Successfully");
+        onEmailChanged(newEmail);
         setCountdown(59); // 只有在成功发送验证码后才开始倒计时
       })
       .catch((error) => {
@@ -43,7 +44,7 @@ const ChangeEmail = ({ isOpen, onClose, onChangeEmail }) => {
         email: newEmail,
       })
       .then((res) => {
-        message.success('Registration successful!');
+        message.success('Your email has changed.');
         onClose();
       })
       .catch((error) => {

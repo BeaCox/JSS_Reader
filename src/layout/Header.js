@@ -7,15 +7,14 @@ import { ReactComponent as DarkLogo } from '../../src/assets/logo.svg';
 import { ReactComponent as LightLogo } from '../../src/assets/logo-light.svg';
 
 import UserProfile from '../components/Header/UserProfile'
-
+import {useSettings} from '../context/settingContext';
 import './Sidebar.css';
 
 const { Header: AntHeader } = Layout;
 
-export default function Header({toggleTheme, isDarkMode }) {
-
+export default function Header() {
   const [drawerVisible, setDrawerVisible] = useState(false);
-
+  const {isDarkMode, toggleGlobalTheme} = useSettings();
   const showDrawer = () => {
     setDrawerVisible(true);
   };
@@ -46,8 +45,8 @@ export default function Header({toggleTheme, isDarkMode }) {
           <DarkLogo style={{ width: '50px', height: '50px', marginRight: 'auto' }} />
         }
 
-        {isDarkMode ? <DayIcon onClick={toggleTheme} className='theme-icon'/> : 
-          <NightIcon onClick={toggleTheme} className='theme-icon' />}
+        {isDarkMode ? <DayIcon onClick={toggleGlobalTheme} className='theme-icon'/> : 
+          <NightIcon onClick={toggleGlobalTheme} className='theme-icon' />}
 
         {/* avatar */}
         <Avatar size="large" icon={<UserOutlined />} onClick={showDrawer} style={{ cursor: 'pointer' }} />

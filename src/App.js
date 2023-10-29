@@ -8,6 +8,7 @@ import LandingPage from './pages/Landing';
 import Login from './components/Landing/Login';
 import Register from './components/Landing/Register';
 import TestAPI from './pages/Test';
+import { SettingsProvider } from './context/settingContext';
 
 function App() {
   return (
@@ -17,7 +18,11 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Home/>}/>
+                <Route path="/home" element={
+                      <SettingsProvider> 
+                        <Home/>
+                        </SettingsProvider>}
+                />
             <Route path="/test" element={<TestAPI/>}/>
         </Routes>
       </Router>

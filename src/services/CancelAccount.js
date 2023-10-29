@@ -27,7 +27,7 @@ const CancelAccount = ({ isOpen, onClose }) => {
     axios
       .post('/api/v1/sendMailCode', { service: 'cancel' })
       .then((res) => {
-        message.success(res.data.message);
+        message.success("Verification Code Sent Successfully");
         setCountdown(59);
       })
       .catch((error) => {

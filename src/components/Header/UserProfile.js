@@ -9,7 +9,7 @@ import { ReactComponent as AccounIcon } from '../../assets/icons/Account.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/icons/Logout.svg';
 import Logout from './Logout';
 
-import { useContent } from '../../services/Context';
+import { useAction } from '../../context/actionContext';
 
 
 export default function UserProfile({avatar, username, email }) {
@@ -23,7 +23,7 @@ export default function UserProfile({avatar, username, email }) {
     setIsLogoutModalVisible(false);
   };
 
-  const { updateAction } = useContent();
+  const { updateAction } = useAction();
   const handleClick = (action) => {
     updateAction(action);
   };
