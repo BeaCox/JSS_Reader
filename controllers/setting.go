@@ -52,18 +52,6 @@ func UpdateSetting(c *fiber.Ctx) error {
 	database.DB.Where("uid = ?", user.Id).First(&setting)
 
 	validate := validator.New()
-	if data["start_page"] != 0 {
-		setting.StartPage = data["start_page"]
-		err := validate.Struct(setting)
-		if err != nil {
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
-				"message": err.Error(),
-			})
-		}
-		database.DB.Model(&setting).Update("start_page", data["start_page"])
-		return c.JSON(setting)
-	}
 
 	if data["default_sort"] != 0 {
 		setting.DefaultSort = data["default_sort"]
