@@ -72,5 +72,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
   - [x] Fontfamily 10.30
   - [x] Theme (add system preference) 10.30
   - [x] Display density 10.30
-- [x] **Settings test and imporove**10.30
+- [x] **Settings test and improve**10.30
 
