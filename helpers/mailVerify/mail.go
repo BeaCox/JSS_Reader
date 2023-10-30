@@ -103,7 +103,7 @@ func SendCode(to string, from string) error {
 		MailPass: mailPass,
 		MailTo:   to,
 		Subject:  "JSS_Reader Verification Code",
-		Body:     prefix[from] + "\n" + "<b>" + code + "</b>" + "\n" + "This code will expire in 5 minutes.",
+		Body:     prefix[from] + "<br />" + "<b style=\"font-size: 20px;\">" + code + "</b>" + "<br />" + "This code will expire in 5 minutes.",
 	}
 
 	err = MailSend(options)
