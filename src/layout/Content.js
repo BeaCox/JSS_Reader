@@ -31,19 +31,17 @@ export default function Content({author, fid, isDarkMode}) {
     2: 'magazine',
     3: 'titlesOnly',
   };
-
+  
   const { settings } = useSettings();
   const { action, headerAction, updateHeaderAction} = useAction();
   const [articles, setArticles] = useState([]);
-  const [viewType, setViewType] = useState(viewMapping[settings.default_presentation]);
+  const [viewType, setViewType] = useState('');
   const [isSpinning, setIsSpinning] = useState(false);
   const showTitlesOnlyView = () => setViewType('titlesOnly');
   const showMagazineView = () => setViewType('magazine');
   const showCardsView = () => setViewType('cards');
   const [params, setParams] = useState({});
-  
-  params.order = settings.default_sort === 1 ? 'latest' : 'oldest';
-  
+
   const handleMenuItemClick = (key) => {
     let newParams = {};
     switch (key) {
@@ -65,16 +63,20 @@ export default function Content({author, fid, isDarkMode}) {
     setParams(newParams); 
   };
 
-    
+
   useEffect(() => {
-    
+      setViewType(viewMapping[settings.default_presentation]);
+  }, [settings]);
+
+  useEffect(() => {
+
   setArticles([]); //important!!!
 
   switch (action) {
     case 'all':
       switch(headerAction){
         case 'date':
-          ArticleAPI.getAllItems(params)
+          ArticleAPI.getAllItems({updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
@@ -96,7 +98,7 @@ export default function Content({author, fid, isDarkMode}) {
           setTimeout(() => {
             setIsSpinning(false); 
         }, 1000);
-          ArticleAPI.updateAllItems()
+          ArticleAPI.updateAllItems({order: settings.default_sort === 1 ? 'latest' : 'oldest'})
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -107,7 +109,7 @@ export default function Content({author, fid, isDarkMode}) {
             updateHeaderAction('');
           break;
         default:
-          ArticleAPI.getAllItems()
+          ArticleAPI.getAllItems({order: settings.default_sort === 1 ? 'latest' : 'oldest'})
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -123,7 +125,7 @@ export default function Content({author, fid, isDarkMode}) {
     case 'unread':
       switch(headerAction){
         case 'date':
-          ArticleAPI.getAllItems({tag:'unread', updatedDuring: params.updatedDuring, order: params.order})
+          ArticleAPI.getAllItems({tag:'unread', updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
               .then(data => {
                   if (Array.isArray(data)) {
                       setArticles(data);
@@ -134,7 +136,7 @@ export default function Content({author, fid, isDarkMode}) {
               
           break;
         case 'read':
-          ArticleAPI.markAllAsRead({ tag: 'unread' })
+          ArticleAPI.markAllAsRead({ tag: 'unread'})
           .then(() => {
             updateHeaderAction('update');
           })
@@ -145,7 +147,7 @@ export default function Content({author, fid, isDarkMode}) {
           setTimeout(() => {
             setIsSpinning(false); 
         }, 1000);
-          ArticleAPI.updateAllItems({ tag: 'unread' })
+          ArticleAPI.updateAllItems({ tag: 'unread', order: settings.default_sort === 1 ? 'latest' : 'oldest'})
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -156,7 +158,7 @@ export default function Content({author, fid, isDarkMode}) {
             updateHeaderAction('');
           break;
         default:
-          ArticleAPI.getAllItems({ tag: 'unread' })  
+          ArticleAPI.getAllItems({ tag: 'unread', order: settings.default_sort === 1 ? 'latest' : 'oldest'})  
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -172,7 +174,7 @@ export default function Content({author, fid, isDarkMode}) {
     case 'star':
       switch(headerAction){
         case 'date':
-                ArticleAPI.getAllItems({tag:'star', updatedDuring: params.updatedDuring, order: params.order})
+                ArticleAPI.getAllItems({tag:'star', updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
                     .then(data => {
                         if (Array.isArray(data)) {
                             setArticles(data);
@@ -183,7 +185,7 @@ export default function Content({author, fid, isDarkMode}) {
                     
                 break;
         case 'read':
-          ArticleAPI.markAllAsRead({ tag: 'starred' })
+          ArticleAPI.markAllAsRead({ tag: 'starred'})
               .then(() => {
                 updateHeaderAction('update');
               })
@@ -195,7 +197,7 @@ export default function Content({author, fid, isDarkMode}) {
           setTimeout(() => {
             setIsSpinning(false); 
         }, 1000);
-          ArticleAPI.updateAllItems({ tag: 'starred' })
+          ArticleAPI.updateAllItems({ tag: 'starred', order: settings.default_sort === 1 ? 'latest' : 'oldest'})
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -206,7 +208,7 @@ export default function Content({author, fid, isDarkMode}) {
             updateHeaderAction('');
           break;              
         default:
-          ArticleAPI.getAllItems({ tag: 'starred' })  
+          ArticleAPI.getAllItems({ tag: 'starred', order: settings.default_sort === 1 ? 'latest' : 'oldest' })  
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);
@@ -222,7 +224,7 @@ export default function Content({author, fid, isDarkMode}) {
     case 'subscriptions':
       switch(headerAction){
         case 'date':
-          ArticleAPI.getFeed(fid, params)
+          ArticleAPI.getFeed(fid, {updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
@@ -244,7 +246,7 @@ export default function Content({author, fid, isDarkMode}) {
           setTimeout(() => {
             setIsSpinning(false); 
         }, 1000);
-          ArticleAPI.updateFeed(fid)
+          ArticleAPI.updateFeed(fid, {order: settings.default_sort === 1 ? 'latest' : 'oldest'})
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
@@ -255,7 +257,7 @@ export default function Content({author, fid, isDarkMode}) {
             updateHeaderAction('');
           break;
         default:
-          ArticleAPI.getFeed(fid)
+          ArticleAPI.getFeed(fid, {order: settings.default_sort === 1 ? 'latest' : 'oldest'})
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);

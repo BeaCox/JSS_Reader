@@ -47,12 +47,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 - [x] **Fetching articles** 10.28
 - [x] Display content following HTML syntax 10.28
 - [x] **Explore page** 10.29
-
 - [x] **Updates when a new subscription is added** 10.30
 - [x] Solve the tag confusion problem 10.30
 - [x] **Solve the bug of not rendering 'unread' icon in time after one-click reading** 10.30
+- [x] Solve the new feed render order problem 10.30
 - [ ] Render 'star' and 'unread' icons anytime property changed
 - [ ] Change the Logo ?
+- [ ] Adapts to different sizes of devices
 
 #### Account
 
@@ -63,7 +64,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 #### **Settings**
 
 - [x] General
-  - [x] Start page - all/star/unread 10.30
   - [x] Default sort - latest/oldest 10.30
   - [x] Default presentation - cards/magazine/titles view 10.30
   - [x] Mark as read on scroll - yes/no 10.30
@@ -72,5 +72,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
   - [x] Fontfamily 10.30
   - [x] Theme (add system preference) 10.30
   - [x] Display density 10.30
-- [ ] **Settings test**
+- [x] **Settings test and imporove**10.30
 

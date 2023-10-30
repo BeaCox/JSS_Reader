@@ -35,7 +35,6 @@ export default function Explore() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedFeed, setSelectedFeed] = useState({ name: '', url: '' });
 
-
   useEffect(() => {
     const fetchAllFeeds = async () => {
       const newFeedData = {};

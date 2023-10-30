@@ -19,7 +19,7 @@ export const updateFeed = (fid, newName, newUrl) => {
 };
 
 export const deleteFeed = (categoryName, fid) => {
-    return axios.delete(`${FEED_BASE_URL}/${categoryName}`, {
+    return axios.delete(`${FEED_BASE_URL}${categoryName}`, {
       data: {
         fid: fid.toString()
       }

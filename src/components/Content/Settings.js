@@ -25,19 +25,6 @@ function Settings() {
   return (
     <div style={{ padding: "2rem 3rem" }}>
       <Card title="General" style={{ marginBottom: "3rem",borderRadius:'20px' }}>
-        <div style={{ marginBottom: 20, fontSize:18 }}>
-          Start Page:
-          <Radio.Group
-            style={{marginLeft:16}}
-            onChange={(e) => handleSettingChange('start_page', e.target.value)}
-            value={settings.start_page}
-          >
-            <Radio.Button value={1}>All</Radio.Button>
-            <Radio.Button value={2}>Star</Radio.Button>
-            <Radio.Button value={3}>Unread</Radio.Button>
-            <Radio.Button value={4}>Explore</Radio.Button>
-          </Radio.Group>
-        </div>
 
         <div style={{ marginBottom: 20, fontSize:18 }}>
           Default Sort:

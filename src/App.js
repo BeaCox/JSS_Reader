@@ -10,6 +10,10 @@ import Register from './components/Landing/Register';
 import TestAPI from './pages/Test';
 import { SettingsProvider } from './context/settingContext';
 
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
+
 function App() {
   return (
     <ParallaxProvider>

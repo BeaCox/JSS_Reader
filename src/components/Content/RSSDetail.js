@@ -7,9 +7,9 @@ import ArticleAPI from '../../api/ArticleAPI';
 import { useSettings } from '../../context/settingContext';
 
 const fontSizeMapping = {
-  1: '12px',
-  2: '16px',
-  3: '20px',
+  1: '16px',
+  2: '20px',
+  3: '24px',
 };
 
 const fontFamilyMapping = {
@@ -19,9 +19,9 @@ const fontFamilyMapping = {
 };
 
 const displayDensityMapping = {
-  1: '1.2',
-  2: '1.5',
-  3: '1.8',
+  1: '1.5',
+  2: '1',
+  3: '2',
 };
 
 function ArticleContent({ content, description}) {
@@ -40,7 +40,13 @@ const dynamicStyle = {
 export default function RSSDetail({ articles, currentArticle, closeDetail, setArticles}) {
   const [isModalVisible, setIsModalVisible] = useState(!!currentArticle);
   const [currentDetailArticle, setCurrentDetailArticle] = useState(currentArticle);
+  const { settings } = useSettings();
+  const dynamicStyle = {
+    fontFamily: fontFamilyMapping[settings.font_family],
+    lineHeight: displayDensityMapping[settings.display_density],
+  };
 
+  
   useEffect(() => {
     setIsModalVisible(!!currentArticle);
     setCurrentDetailArticle(currentArticle);
@@ -155,10 +161,10 @@ export default function RSSDetail({ articles, currentArticle, closeDetail, setAr
           </div>
           <div className="modal-content-container">
             <hr />
-            <h2>{currentDetailArticle.title}</h2>
-            <p>
+            <h1 style={dynamicStyle}>{currentDetailArticle.title}</h1>
+            <h2 style={dynamicStyle}>
               {currentDetailArticle.author} | {new Date(currentDetailArticle.published).toLocaleString()}
-            </p>
+            </h2>
             {currentDetailArticle && <ArticleContent content={currentDetailArticle.content} description={currentDetailArticle.description} />}
             <LeftOutlined
               onClick={prevArticle}

@@ -13,8 +13,8 @@ const ArticleAPI = {
   },
 
   // 立即解析RSS查看是否有新的更新，若有会存储到数据库
-  updateFeed: async (fid) => {
-    return axios.get(`/api/v1/item/one/update/${fid}`)
+  updateFeed: async (fid, params) => {
+    return axios.get(`/api/v1/item/one/update/${fid}`, {params})
       .then(response => response.data)
       .catch(error => {
         console.error('Error updating single feed:', error);

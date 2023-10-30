@@ -62,7 +62,7 @@ export default function TitleView({ articles: initialArticles, isDarkMode }) {
                         style={{
                             transition: 'all 0.3s',
                             cursor: 'pointer',
-                            height:'40px',
+                            height:'45px',
                         }}
                         actions={[
                             <Typography.Text ellipsis style={{ maxWidth: '7rem'}}>
