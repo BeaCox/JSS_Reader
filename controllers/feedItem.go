@@ -52,9 +52,9 @@ func GetFeedItemsofFeed(c *fiber.Ctx) error {
 
 	order := c.Query("order")
 	if order == "oldest" {
-		order = "desc"
-	} else {
 		order = "asc"
+	} else {
+		order = "desc"
 	}
 	tag := c.Query("tag")
 	var items []models.FeedItem
