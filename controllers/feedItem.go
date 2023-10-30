@@ -5,8 +5,8 @@ import (
 	"JSS_Reader/helpers/rssParser"
 	"JSS_Reader/middleware"
 	"JSS_Reader/models"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 func GetFeedItemsofFeed(c *fiber.Ctx) error {
@@ -120,6 +120,7 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 	// get items by parsing feed url
 	items, err := rssParser.ParseFeed(feed.Url)
 	if err != nil {
+		log.Println("cannot update feed: " + feed.Url + " " + err.Error())
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "cannot update feed",
@@ -287,8 +288,8 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 		// get items by parsing feed url
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
-			fmt.Println(err)
 			// just skip this feed
+			log.Println("cannot update feed: " + feed.Url + " " + err.Error())
 			continue
 		}
 		// for each item, check if it is already in database
@@ -457,7 +458,7 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 		items, err := rssParser.ParseFeed(feed.Url)
 		if err != nil {
 			// just skip this feed
-			fmt.Println(err)
+			log.Println("cannot update feed: " + feed.Url + " " + err.Error())
 			continue
 		}
 		// for each item, check if it is already in database

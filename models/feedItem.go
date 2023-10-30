@@ -13,7 +13,7 @@ type FeedItem struct {
 	Title       string    `json:"title" gorm:"type:text;not null"`
 	Author      string    `json:"author" gorm:"type:varchar(255);not null"`
 	Description string    `json:"description" gorm:"type:text;not null"`
-	Content     string    `json:"content" gorm:"type:text;not null"`
+	Content     string    `json:"content" gorm:"type:mediumtext;not null"`
 	Updated     time.Time `json:"updated" gorm:"type:datetime;not null"`
 	Published   time.Time `json:"published" gorm:"type:datetime;not null"`
 }

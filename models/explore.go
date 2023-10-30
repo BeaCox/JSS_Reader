@@ -6,6 +6,6 @@ type Explore struct {
 	Category    string `json:"category" gorm:"uniqueIndex:unique_group;type:varchar(255)"`
 	Name        string `json:"name" gorm:"uniqueIndex:unique_group;type:varchar(255)"`
 	Url         string `json:"url" gorm:"uniqueIndex:unique_group;type:varchar(255)"`
-	Description string `json:"description" gorm:"type:varchar(255)"`
+	Description string `json:"description" gorm:"type:text"`
 	Image       string `json:"image" gorm:"type:varchar(255)"`
 }
