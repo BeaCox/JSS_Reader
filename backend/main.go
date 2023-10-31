@@ -21,7 +21,7 @@ func main() {
 
 	app := fiber.New()
 
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load(); err != nil {
 		panic("could not load env variables")
 	}
 	REMOTE_URL := os.Getenv("REMOTE_URL")

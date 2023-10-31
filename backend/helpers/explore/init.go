@@ -35,7 +35,7 @@ func Init() error {
 }
 
 func importSql() error {
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load(); err != nil {
 		panic("could not load env variables")
 	}
 	REMOTE_URL := os.Getenv("REMOTE_URL")
