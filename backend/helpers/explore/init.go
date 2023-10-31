@@ -4,7 +4,9 @@ import (
 	"JSS_Reader/database"
 	"JSS_Reader/models"
 	"bufio"
+	"github.com/joho/godotenv"
 	"os"
+	"strings"
 )
 
 // use /resouces/explore.sql to init explore table
@@ -33,16 +35,22 @@ func Init() error {
 }
 
 func importSql() error {
-
-	file, err := os.Open("resources/explores.sql")
+	if err := godotenv.Load("../.env"); err != nil {
+		panic("could not load env variables")
+	}
+	REMOTE_URL := os.Getenv("REMOTE_URL")
+	file, err := os.Open("resources/explores/explores.sql")
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
+		// replace "/path/to/" to REMOTE_URL/images/
+		sqlLine := scanner.Text()
+		sqlLine = strings.Replace(sqlLine, "/path/to/", REMOTE_URL+"/images/", -1)
 		// use gorm to execute sql
-		result := database.DB.Exec(scanner.Text())
+		result := database.DB.Exec(sqlLine)
 		if result.Error != nil {
 			return result.Error
 		}

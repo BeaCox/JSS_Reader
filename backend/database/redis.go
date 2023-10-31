@@ -16,7 +16,7 @@ var (
 )
 
 func RedisInit() {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("../.env"); err != nil {
 		panic("could not load env variables")
 	}
 

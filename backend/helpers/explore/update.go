@@ -31,9 +31,10 @@ func update() {
 		feedParsed, err := fp.ParseURLWithContext(feed.Url, ctx)
 		if err != nil {
 			log.Println("update explore error: " + feed.Url + " " + err.Error())
+			cancel()
 			continue
 		}
-		// update description and image
+		// update description
 		if feedParsed.Description != "" {
 			// if description is too long, use name instead
 			if len(feedParsed.Description) > 2000 {
@@ -41,10 +42,6 @@ func update() {
 			}
 			database.DB.Model(&feed).Update("description", feedParsed.Description)
 			log.Println("update explore description: " + feed.Name + " " + feedParsed.Description)
-		}
-		if feedParsed.Image != nil {
-			database.DB.Model(&feed).Update("image", feedParsed.Image.URL)
-			log.Println("update explore image: " + feed.Name + " " + feedParsed.Image.URL)
 		}
 		// refresh ctx
 		cancel()
