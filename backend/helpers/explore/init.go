@@ -39,7 +39,7 @@ func importSql() error {
 	if err := godotenv.Load(); err != nil {
 		panic("could not load env variables")
 	}
-	REMOTE_URL := os.Getenv("REMOTE_URL")
+	REMOTE_BACKEND_URL := os.Getenv("REMOTE_BACKEND_URL")
 	file, err := os.Open("resources/explores/explores.sql")
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func importSql() error {
 	for scanner.Scan() {
 		// replace "/path/to/" to REMOTE_URL/images/
 		sqlLine := scanner.Text()
-		sqlLine = strings.Replace(sqlLine, "/path/to/", REMOTE_URL+"/images/", -1)
+		sqlLine = strings.Replace(sqlLine, "/path/to/", REMOTE_BACKEND_URL+"/images/", -1)
 		// use gorm to execute sql
 		result := database.DB.Exec(sqlLine)
 		if result.Error != nil {
