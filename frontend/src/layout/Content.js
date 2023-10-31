@@ -73,6 +73,7 @@ export default function Content({author, fid, isDarkMode}) {
     
   setArticles([]); //important!!!
   setIsLoaded(true);
+  
   switch (action) {
     case 'all':
       switch(headerAction){
@@ -81,9 +82,9 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
-                  setIsLoaded(false);
+                  
               }
-              
+              setIsLoaded(false);
           })
           .catch(error => {console.error('Error fetching all articles:', error);setIsLoaded(false);});
         
@@ -104,9 +105,9 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
+                
               }
-              
+              setIsLoaded(false);
             })
             .catch(error => {console.error('Error updating all items:', error);setIsLoaded(false);});
             updateHeaderAction('');
@@ -116,9 +117,9 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
+                
               }
-              
+              setIsLoaded(false);
             })
             .catch(error => {console.error('Error fetching all items:', error);setIsLoaded(false);});
             
@@ -133,9 +134,9 @@ export default function Content({author, fid, isDarkMode}) {
               .then(data => {
                   if (Array.isArray(data)) {
                       setArticles(data);
-                      setIsLoaded(false);
+                      
                   }
-                  
+                  setIsLoaded(false);
               })
               .catch(error => {console.error('Error fetching unread articles:', error);setIsLoaded(false);});
               
@@ -156,9 +157,9 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
+                
               }
-              
+              setIsLoaded(false);
             })
             .catch(error => {console.error('Error updating unread items:', error);setIsLoaded(false);});
             updateHeaderAction('');
@@ -168,9 +169,9 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
+                
               }
-              
+              setIsLoaded(false);
             })
             .catch(error => {console.error('Error fetching unread items:', error);setIsLoaded(false);});
             
@@ -185,9 +186,9 @@ export default function Content({author, fid, isDarkMode}) {
                     .then(data => {
                         if (Array.isArray(data)) {
                             setArticles(data);
-                            setIsLoaded(false);
+                            
                         }
-                        
+                        setIsLoaded(false);
                     })
                     .catch(error => {console.error('Error fetching starred articles:', error);setIsLoaded(false);});
                     
@@ -209,8 +210,8 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
-              }
+                
+              }setIsLoaded(false);
             })
             .catch(error => {console.error('Error updating starred items:', error);setIsLoaded(false);});
             updateHeaderAction('');
@@ -220,9 +221,9 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);
-              setIsLoaded(false);
+              
             }
-            
+            setIsLoaded(false);
           })
           .catch(error => {console.error('Error fetching starred items:', error);setIsLoaded(false);});
           
@@ -237,9 +238,9 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
-                  setIsLoaded(false);
+                  
               }
-              
+              setIsLoaded(false);
           })
           .catch(error => {console.error('Error fetching single feed articles:', error);setIsLoaded(false);});
           
@@ -260,8 +261,8 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                setIsLoaded(false);
-              }
+                
+              }setIsLoaded(false);
             })
             .catch(error => {console.error('Error updating feed items:', error);setIsLoaded(false);});
             updateHeaderAction('');
@@ -271,8 +272,8 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);
-              setIsLoaded(false);
-            }
+              
+            }setIsLoaded(false);
             
           })
           .catch(error => {console.error('Error fetching feed items:', error);setIsLoaded(false);});
@@ -299,9 +300,10 @@ export default function Content({author, fid, isDarkMode}) {
   };
 
   const renderContent = () => {
-    if ((action==='all'||action==='unread'||action==='star'||action==='subscriptions')&&isLoaded) {
-      return <Spin tip="Loading..." size='large' style={{margin:'15rem 38rem'}}></Spin>;
+    if ((action==='all'||action==='unread'||action==='star'||action==='subscriptions') && isLoaded) {
+      return <Spin tip="Loading..." size='large' style={{margin:'16rem 39rem'}}/>;
     }
+
     switch (action) {    
       case 'account':
         return <Account />;
