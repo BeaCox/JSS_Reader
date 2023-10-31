@@ -182,7 +182,7 @@ export default function Content({author, fid, isDarkMode}) {
     case 'star':
       switch(headerAction){
         case 'date':
-                ArticleAPI.getAllItems({tag:'star', updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
+                ArticleAPI.getAllItems({tag:'starred', updatedDuring: params.updatedDuring, order: settings.default_sort === 1 ? 'latest' : 'oldest'})
                     .then(data => {
                         if (Array.isArray(data)) {
                             setArticles(data);
