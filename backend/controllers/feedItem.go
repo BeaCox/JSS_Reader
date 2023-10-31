@@ -129,7 +129,7 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 	// for each item, check if it is already in database
 	for _, item := range items {
 		var temp models.FeedItem
-		database.DB.Where("url = ?", item.Url).First(&temp)
+		database.DB.Where("url = ? and fid = ?", item.Url, fid).First(&temp)
 		// if not found, create a new item
 		if temp.Iid == 0 {
 			item.Fid = feed.Fid
@@ -297,7 +297,7 @@ func UpdateFeedItemsofCategory(c *fiber.Ctx) error {
 		// for each item, check if it is already in database
 		for _, item := range items {
 			var temp models.FeedItem
-			database.DB.Where("url = ?", item.Url).First(&temp)
+			database.DB.Where("url = ? and fid = ?", item.Url, feed.Fid).First(&temp)
 			// if not found, create a new item
 			if temp.Iid == 0 {
 				item.Fid = feed.Fid
@@ -466,7 +466,7 @@ func UpdateAllFeedItems(c *fiber.Ctx) error {
 		// for each item, check if it is already in database
 		for _, item := range items {
 			var temp models.FeedItem
-			database.DB.Where("url = ?", item.Url).First(&temp)
+			database.DB.Where("url = ? and fid = ?", item.Url, feed.Fid).First(&temp)
 			// if not found, create a new item
 			if temp.Iid == 0 {
 				item.Fid = feed.Fid
