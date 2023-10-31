@@ -95,7 +95,7 @@ export default function Subscription({ onSubscriptionClick }) {
     }, [contextMenuVisible]);
 
     return (
-        <div style={{ height: '540px', overflowY: 'auto', marginTop: '4px' }}>
+        <div style={{ height: '450px', overflowY: 'auto', marginTop: '4px' }}>
             <Menu selectable={false} mode="inline" multiple={false} style={{ borderRight: 'none' }}>
                 {folders.map((folder, index) => (
                     <Menu.SubMenu

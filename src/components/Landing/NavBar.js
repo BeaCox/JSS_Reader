@@ -28,7 +28,7 @@ const NavBar = () => {
             backdropFilter: scrolled ? 'blur(1px)' : '',
             display:'flex',
             width: '100%', 
-            height:'80px',
+            height:'70px',
             boxShadow: scrolled ? '0 0 20px rgba(0, 0, 0, 0.1)' : '',
         
             zIndex: 1000,
@@ -37,7 +37,7 @@ const NavBar = () => {
            <Row style={{ width: '100%', margin: '0' }} justify="space-between">
                 <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Link to="/" style={{ display: 'inline-block', margin: '0', padding: '0', lineHeight: '0' }}>
-                        <img src={logo} alt="JSS Logo" style={{ width: '80px', height: '80px' }} />
+                        <img src={logo} alt="JSS Logo" style={{ width: '70px', height: '70px' }} />
                     </Link>
                 </Col>
             </Row>

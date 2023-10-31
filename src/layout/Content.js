@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Empty, Layout } from 'antd';
+import { Empty, Layout, Spin} from 'antd';
 import BGicon from '../assets/icons/emptyBG.svg';
 import CardView from '../components/Content/CardView';
 import ArticleAPI from '../api/ArticleAPI';
@@ -37,6 +37,7 @@ export default function Content({author, fid, isDarkMode}) {
   const [articles, setArticles] = useState([]);
   const [viewType, setViewType] = useState('');
   const [isSpinning, setIsSpinning] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const showTitlesOnlyView = () => setViewType('titlesOnly');
   const showMagazineView = () => setViewType('magazine');
   const showCardsView = () => setViewType('cards');
@@ -69,9 +70,9 @@ export default function Content({author, fid, isDarkMode}) {
   }, [settings]);
 
   useEffect(() => {
-
+    
   setArticles([]); //important!!!
-
+  setIsLoaded(true);
   switch (action) {
     case 'all':
       switch(headerAction){
@@ -80,10 +81,11 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
+                  setIsLoaded(false);
               }
               
           })
-          .catch(error => console.error('Error fetching all articles:', error));
+          .catch(error => {console.error('Error fetching all articles:', error);setIsLoaded(false);});
         
       break;
         case 'read':
@@ -102,10 +104,11 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
+                setIsLoaded(false);
               }
               
             })
-            .catch(error => console.error('Error updating all items:', error));
+            .catch(error => {console.error('Error updating all items:', error);setIsLoaded(false);});
             updateHeaderAction('');
           break;
         default:
@@ -113,10 +116,11 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
+                setIsLoaded(false);
               }
               
             })
-            .catch(error => console.error('Error fetching all items:', error));
+            .catch(error => {console.error('Error fetching all items:', error);setIsLoaded(false);});
             
           break;
       }
@@ -129,10 +133,11 @@ export default function Content({author, fid, isDarkMode}) {
               .then(data => {
                   if (Array.isArray(data)) {
                       setArticles(data);
+                      setIsLoaded(false);
                   }
                   
               })
-              .catch(error => console.error('Error fetching unread articles:', error));
+              .catch(error => {console.error('Error fetching unread articles:', error);setIsLoaded(false);});
               
           break;
         case 'read':
@@ -151,10 +156,11 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
+                setIsLoaded(false);
               }
               
             })
-            .catch(error => console.error('Error updating unread items:', error));
+            .catch(error => {console.error('Error updating unread items:', error);setIsLoaded(false);});
             updateHeaderAction('');
           break;
         default:
@@ -162,10 +168,11 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
+                setIsLoaded(false);
               }
               
             })
-            .catch(error => console.error('Error fetching unread items:', error));
+            .catch(error => {console.error('Error fetching unread items:', error);setIsLoaded(false);});
             
           break;
       }
@@ -178,10 +185,11 @@ export default function Content({author, fid, isDarkMode}) {
                     .then(data => {
                         if (Array.isArray(data)) {
                             setArticles(data);
+                            setIsLoaded(false);
                         }
                         
                     })
-                    .catch(error => console.error('Error fetching starred articles:', error));
+                    .catch(error => {console.error('Error fetching starred articles:', error);setIsLoaded(false);});
                     
                 break;
         case 'read':
@@ -201,10 +209,10 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                
+                setIsLoaded(false);
               }
             })
-            .catch(error => console.error('Error updating starred items:', error));
+            .catch(error => {console.error('Error updating starred items:', error);setIsLoaded(false);});
             updateHeaderAction('');
           break;              
         default:
@@ -212,10 +220,11 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);
+              setIsLoaded(false);
             }
             
           })
-          .catch(error => console.error('Error fetching starred items:', error));
+          .catch(error => {console.error('Error fetching starred items:', error);setIsLoaded(false);});
           
         break;
       }
@@ -228,10 +237,11 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
               if (Array.isArray(data)) {
                   setArticles(data);
+                  setIsLoaded(false);
               }
               
           })
-          .catch(error => console.error('Error fetching single feed articles:', error));
+          .catch(error => {console.error('Error fetching single feed articles:', error);setIsLoaded(false);});
           
       break;
         case 'read':
@@ -250,10 +260,10 @@ export default function Content({author, fid, isDarkMode}) {
             .then(data => {
               if (Array.isArray(data)) {
                 setArticles(data);
-                
+                setIsLoaded(false);
               }
             })
-            .catch(error => console.error('Error updating feed items:', error));
+            .catch(error => {console.error('Error updating feed items:', error);setIsLoaded(false);});
             updateHeaderAction('');
           break;
         default:
@@ -261,16 +271,18 @@ export default function Content({author, fid, isDarkMode}) {
           .then(data => {
             if (Array.isArray(data)) {
               setArticles(data);
+              setIsLoaded(false);
             }
             
           })
-          .catch(error => console.error('Error fetching feed items:', error));
+          .catch(error => {console.error('Error fetching feed items:', error);setIsLoaded(false);});
           
         break;
       }
       break;
 
     default:
+      setIsLoaded(false);
       break;
   }
 }, [action, fid, headerAction, params]);
@@ -287,6 +299,9 @@ export default function Content({author, fid, isDarkMode}) {
   };
 
   const renderContent = () => {
+    if ((action==='all'||action==='unread'||action==='star'||action==='subscriptions')&&isLoaded) {
+      return <Spin tip="Loading..." size='large' style={{margin:'15rem 38rem'}}></Spin>;
+    }
     switch (action) {    
       case 'account':
         return <Account />;
@@ -316,7 +331,7 @@ export default function Content({author, fid, isDarkMode}) {
   
 
 return (
- <AntContent style={{ height: 'calc(100vh - 64px)' }}>
+ <AntContent style={{ flex: 1}}>
       <RSSHeader 
         isDarkMode={isDarkMode} 
         action={action}
@@ -331,7 +346,7 @@ return (
         isSpinning={isSpinning}
         setIsSpinning={setIsSpinning}
       />
-      <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px - 53px)' }}>
+      <div style={{  height: 'calc(100vh - 64px - 53px)', overflowY: 'auto' }}>
         {renderContent()}
       </div>
     </AntContent>

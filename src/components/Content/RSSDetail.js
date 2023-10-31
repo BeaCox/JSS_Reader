@@ -133,10 +133,10 @@ export default function RSSDetail({ articles, currentArticle, closeDetail, setAr
         <Modal
           open={isModalVisible}
           footer={null}
-          width={950}
+          width={900}
           centered={true}
           style={{ position: 'relative', overflowY: 'visible'}}
-          styles={{ body: {height: 820, padding:'5px 5rem'} }}
+          styles={{ body: {height: 720, padding:'5px 5rem'} }}
           onCancel={() => {
             setIsModalVisible(false);
             closeDetail();

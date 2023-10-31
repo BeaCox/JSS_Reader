@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef}from 'react';
 import { Row, Col } from 'antd';
 import sorted from '../../assets/image/sorted.jpg';
-import search from '../../assets/image/search.jpg';
+import customize from '../../assets/image/customize.jpg';
 import screenshotdark from '../../assets/image/screenshotdark.jpg';
 import explore from '../../assets/image/explore.jpg';
 import sjtu from '../../assets/image/sjtu.jpg';
@@ -102,9 +102,9 @@ const FeatureBlock = ({ imgSrc, title, description, imgWidth = '270px', imgHeigh
 const Features = () => {
     const featuresData = [
         { imgSrc: sorted, title: 'Organized and Sorted', 
-            description: 'Tag-based subscription management keeps all your feeds tidy and clear.' },
-        { imgSrc: search, title: 'Search What You Want', 
-            description: 'Lookup articles by title or content to quickly find what interests you.' },
+            description: 'Folder Grouping Subscription management keeps all your feeds tidy and clear.' },
+        { imgSrc: customize, title: 'Customized', 
+            description: 'Personalize it to your personal preferences.' },
         { imgSrc: screenshotdark, title: 'Day and Night Reading', 
             description: 'Switch freely between dark and light modes for ultimate reading comfort.' },
         { imgSrc: explore, title: 'Discover New Horizons', 

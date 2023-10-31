@@ -8,7 +8,7 @@ import { useAction } from '../../context/actionContext';
 
 export default function NewFeed({ modalVisible, setModalVisible, initialFeed }) {
   const {folders, updateFolders } = useFolder();
-  const { updateAction, updateHeaderAction } = useAction();
+  const { updateHeaderAction } = useAction();
   const [feedName, setFeedName] = useState(initialFeed?.name || '');
   const [rssUrl, setRssUrl] = useState(initialFeed?.url || '');
   const [folderName, setFolderName] = useState('');
@@ -63,8 +63,7 @@ export default function NewFeed({ modalVisible, setModalVisible, initialFeed }) 
             setIsLoading(false);
             return;
         }
-
-        updateAction('subscription');
+        
         updateHeaderAction('update');
      
         updateFolders(prevFolders => {

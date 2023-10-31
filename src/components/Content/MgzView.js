@@ -106,7 +106,7 @@ export default function MgzView({ articles: initialArticles, isDarkMode }) {
   
                   {/* Date & Icons */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Typography.Text>
+                    <Typography.Text style={{maxWidth:'40rem'}} ellipsis>
                       {article.author} | {new Date(article.published).toLocaleString()}
                     </Typography.Text>
   

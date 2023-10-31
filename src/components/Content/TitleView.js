@@ -107,11 +107,11 @@ export default function TitleView({ articles: initialArticles, isDarkMode }) {
                                 style={{ border: 'none', background: 'none',marginLeft:'1rem'}}
                             />
                             <Typography.Text strong 
-                                style={{ maxWidth:'12rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                style={{ maxWidth:'10rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {article.title}
                             </Typography.Text>
                             <Typography.Text ellipsis 
-                                style={{ maxWidth: '48rem', whiteSpace: 'nowrap' }}>
+                                style={{ maxWidth: '40rem', whiteSpace: 'nowrap' }}>
                                 {extractTextFromHTML(article.description)}
                             </Typography.Text>
                         </div>

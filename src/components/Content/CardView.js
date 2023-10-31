@@ -70,7 +70,7 @@ const handleRead = async (index) => {
 
   return (
     <>
-      <Row gutter={[16, 16]} style={{ padding: '2rem 3rem', margin: '0' }}>
+      <Row gutter={[20, 16]} style={{ padding: '2rem 3rem', margin: '0' }}>
         {articles.map((article, index) => {
           const imageUrl = getFirstImage(article.description, article.content);
           return (
@@ -84,7 +84,7 @@ const handleRead = async (index) => {
                   }
                 }}
                 style={{ 
-                  width: '325px',
+                  width: '285px',
                   height: '360px',
                   borderRadius: '10px',
                   display: 'flex',
@@ -93,7 +93,7 @@ const handleRead = async (index) => {
                 }}
                 bodyStyle={{padding:'20px'}}
                 cover={ imageUrl && (
-                  <img src={imageUrl} alt="Article Cover" style={{height:'180px', width:'325px', objectFit:'cover'}}/>
+                  <img src={imageUrl} alt="Article Cover" style={{height:'180px', width:'285px', objectFit:'cover'}}/>
                 )}
                 actions={[
                   <div onClick={(e) => { e.stopPropagation(); handleStar(index); }}>

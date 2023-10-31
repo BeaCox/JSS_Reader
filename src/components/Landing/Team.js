@@ -48,7 +48,7 @@ const Team = () => {
     const teamData = [
         { imgSrc: beacox, name: 'Beacox', role: 'Back-end', link: 'https://www.beacox.space/' },
         { imgSrc: wytili, name: 'Wytili', role: 'Front-end', link: 'https://github.com/wytili' },
-        { imgSrc: sora, name: 'Sora', role: 'Front-end', link: 'https://www.example.com/sora' },
+        { imgSrc: sora, name: 'Sora', role: 'Front-end', link: 'https://github.com/Sora-Yanl' },
         { imgSrc: gaoi, name: 'G-AOi', role: 'Back-end', link: 'https://github.com/G-AOi' }
     ];
     

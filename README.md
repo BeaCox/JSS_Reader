@@ -51,6 +51,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 - [x] Solve the tag confusion problem 10.30
 - [x] **Solve the bug of not rendering 'unread' icon in time after one-click reading** 10.30
 - [x] Solve the new feed render order problem 10.30
+- [x] Add a loading component before successfully rendering the article 10.31
+- [x] Modify the style 10.31
 - [ ] Render 'star' and 'unread' icons anytime property changed
 - [ ] Change the Logo ?
 - [ ] Adapts to different sizes of devices
@@ -72,5 +74,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
   - [x] Fontfamily 10.30
   - [x] Theme (add system preference) 10.30
   - [x] Display density 10.30
-- [x] **Settings test and improve**10.30
+- [x] **Settings test and imporove **10.31
 

@@ -21,27 +21,26 @@ const handleSubscriptionSelected = (fid, name) => {
 };
 
   return (
-    <ActionProvider>
-      <ConfigProvider theme={{algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,}}>
-        <Layout style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          {/* header on the top */}
-          <Header isDarkMode={isDarkMode} />
-    
-          {/* layout on the bottom */}
-          <Layout style={{ display: 'flex', flexDirection: 'row'}}>
-            {/* feed list */}
-            <FolderProvider>
-              <Sidebar folders={folders} setFolders={setFolders}  onSelectedSubscription={handleSubscriptionSelected}/>
-           
-            {/* feed content */}
-            <Content author={selectedSubscriptionName} fid={selectedSubscriptionFid} isDarkMode={isDarkMode} />
-             </FolderProvider>
-          </Layout>
-    
+  <ActionProvider>
+    <ConfigProvider theme={{algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,}}>
+      <Layout style={{ minHeight: '100vh', flexDirection: 'column', display: 'flex' }}>
+        {/* header on the top */}
+        <Header isDarkMode={isDarkMode} />
+
+        {/* layout on the bottom */}
+        <Layout style={{ flex: 1, flexDirection: 'row', display: 'flex' }}>
+          <FolderProvider>
+            <Sidebar folders={folders} setFolders={setFolders} onSelectedSubscription={handleSubscriptionSelected}/>
+        
+          {/* feed content */}
+          <Content author={selectedSubscriptionName} fid={selectedSubscriptionFid} isDarkMode={isDarkMode} />
+          </FolderProvider>
         </Layout>
-      </ConfigProvider>
-    </ActionProvider>
-  );
+      </Layout>
+    </ConfigProvider>
+  </ActionProvider>
+);
+
   
 };
 

@@ -28,7 +28,7 @@ export default function FeedMenu({folders, setFolders, onSubscriptionSelected}) 
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 10px 0 10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 10px 0 10px'}}>
         <span style={{ color: 'gray', fontSize:'15px'}}>Feed</span>
         <Dropdown overlay={FeedOpMenu}>
           <MoreIcon style={{ cursor: 'pointer', width:'20px', height:'20px'}} />
