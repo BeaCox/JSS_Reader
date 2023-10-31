@@ -7,7 +7,9 @@ import (
 	"JSS_Reader/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 func main() {
@@ -19,14 +21,19 @@ func main() {
 
 	app := fiber.New()
 
+	if err := godotenv.Load("../.env"); err != nil {
+		panic("could not load env variables")
+	}
+	REMOTE_URL := os.Getenv("REMOTE_URL")
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
-		AllowOrigins:     "http://localhost:3000, http://49.0.202.239",
+		AllowOrigins:     "http://localhost:3000, " + REMOTE_URL,
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
 
 	routes.Setup(app)
+	app.Static("/images", "./resources/images")
 
 	// one routine to update explore
 	// another routine to update rss for all users

@@ -149,16 +149,22 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 		// if found, and updated time is the same, do nothing
 	}
 
+	order := c.Query("order")
+	if order == "oldest" {
+		order = "asc"
+	} else {
+		order = "desc"
+	}
 	// get items from database
 	tag := c.Query("tag")
 	var itemsFromDatabase []models.FeedItem
 	switch tag {
 	case "starred":
-		database.DB.Where("fid = ? AND starred = ?", fid, 1).Find(&itemsFromDatabase)
+		database.DB.Where("fid = ? AND starred = ?", fid, 1).Order("published " + order).Find(&itemsFromDatabase)
 	case "unread":
-		database.DB.Where("fid = ? AND unread = ?", fid, 1).Find(&itemsFromDatabase)
+		database.DB.Where("fid = ? AND unread = ?", fid, 1).Order("published " + order).Find(&itemsFromDatabase)
 	default:
-		database.DB.Where("fid = ?", fid).Find(&itemsFromDatabase)
+		database.DB.Where("fid = ?", fid).Order("published " + order).Find(&itemsFromDatabase)
 	}
 
 	updatedDuring := c.Query("updatedDuring")
@@ -166,10 +172,6 @@ func UpdateFeedItemsofFeed(c *fiber.Ctx) error {
 	if updatedDuring != "" {
 		itemsFromDatabase = rssParser.FilterFeedItemsByDate(itemsFromDatabase, updatedDuring)
 	}
-
-	order := c.Query("order")
-	// sort the feed items by updated time
-	itemsFromDatabase = rssParser.SortFeedItemsByPublished(itemsFromDatabase, order)
 
 	return c.JSON(itemsFromDatabase)
 }
