@@ -7,7 +7,6 @@ import Home from './pages/Home';
 import LandingPage from './pages/Landing';
 import Login from './components/Landing/Login';
 import Register from './components/Landing/Register';
-import TestAPI from './pages/Test';
 import { SettingsProvider } from './context/settingContext';
 
 import axios from 'axios';
@@ -27,7 +26,6 @@ function App() {
                         <Home/>
                         </SettingsProvider>}
                 />
-            <Route path="/test" element={<TestAPI/>}/>
         </Routes>
       </Router>
     </ParallaxProvider>
