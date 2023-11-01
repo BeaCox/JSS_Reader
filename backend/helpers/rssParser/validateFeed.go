@@ -3,11 +3,14 @@ package rssParser
 import (
 	"context"
 	"github.com/mmcdole/gofeed"
+	"io"
+	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
-func IsValidFeed(feed string) bool {
+func IsValidFeedAbsolutelygit(feed string) bool {
 	// if url encoded, decode it
 	feed, err := url.QueryUnescape(feed)
 	if err != nil {
@@ -27,4 +30,28 @@ func IsValidFeed(feed string) bool {
 	}
 
 	return true
+}
+
+func IsValidFeed(url string) bool {
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false
+	}
+
+	// convert body to lower case
+	bodyStr := strings.ToLower(string(body))
+
+	// just check if the body contains one of the rss tags
+	if strings.Contains(bodyStr, "<rss") || strings.Contains(bodyStr, "<rdf") || strings.Contains(bodyStr, "<feed") {
+		return true
+	}
+
+	return false
 }
