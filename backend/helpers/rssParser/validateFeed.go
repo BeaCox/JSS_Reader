@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func IsValidFeedAbsolutelygit(feed string) bool {
+func IsValidFeedAbsolutely(feed string) bool {
 	// if url encoded, decode it
 	feed, err := url.QueryUnescape(feed)
 	if err != nil {
