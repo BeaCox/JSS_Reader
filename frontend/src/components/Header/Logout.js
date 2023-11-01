@@ -14,7 +14,7 @@ export default function Logout({onClose}) {
 
   const handleLogout = () => {
     axios
-      .post('http://localhost:8000/api/v1/logout')
+      .post('/api/v1/logout')
       .then((res) => {
         message.success(res.data.message);
       })
