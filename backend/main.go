@@ -27,7 +27,7 @@ func main() {
 	REMOTE_FRONTEND_URL := os.Getenv("REMOTE_FRONTEND_URL")
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
-		AllowOrigins:     "http://localhost:3000, " + REMOTE_FRONTEND_URL,
+		AllowOrigins:     REMOTE_FRONTEND_URL,
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))

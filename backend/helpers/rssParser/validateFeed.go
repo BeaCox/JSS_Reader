@@ -32,9 +32,14 @@ func IsValidFeedAbsolutely(feed string) bool {
 	return true
 }
 
-func IsValidFeed(url string) bool {
+func IsValidFeed(feed string) bool {
+	// if url encoded, decode it
+	feed, err := url.QueryUnescape(feed)
+	if err != nil {
+		return false
+	}
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(feed)
 	if err != nil {
 		return false
 	}
