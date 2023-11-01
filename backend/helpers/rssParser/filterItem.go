@@ -18,13 +18,13 @@ func FilterFeedItemsByDate(feedItems []models.FeedItem, updatedDuring string) []
 		}
 	case "week":
 		for _, item := range feedItems {
-			if item.Published.Year() == now.Year() && item.Published.Month() == now.Month() && item.Published.Day() >= now.Day()-7 {
+			if item.Updated.After(now.AddDate(0, 0, -7)) {
 				filteredItems = append(filteredItems, item)
 			}
 		}
 	case "month":
 		for _, item := range feedItems {
-			if item.Published.Year() == now.Year() && item.Published.Month() == now.Month() {
+			if item.Updated.After(now.AddDate(0, -1, 0)) {
 				filteredItems = append(filteredItems, item)
 			}
 		}
