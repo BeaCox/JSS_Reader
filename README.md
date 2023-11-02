@@ -1,6 +1,6 @@
 # JSS_Reader
 
-**A reader for SJTU Simple Syndication. **
+**A reader for SJTU Simple Syndication.**
 
 ## Front-end 
 
